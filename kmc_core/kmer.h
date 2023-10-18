@@ -64,6 +64,9 @@ template<unsigned SIZE> struct CKmer {
 	inline void fill_T();
 
 	inline void random_init(uint32 pos, uint64 value);
+
+    // Added ny MRH
+    inline string get_string_representation();
 };
 
 template <unsigned SIZE> uint32 CKmer<SIZE>::KMER_SIZE = SIZE;
