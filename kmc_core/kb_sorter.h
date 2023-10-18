@@ -1014,12 +1014,13 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 			while (kxmer_set.get_min(counter_pos, next_kmer))
 			{
                 // MRH start
-                string res_str = ""
-                for (uint32 i = SIZE-1; i>=0; i++)
-                {
-                    res_str += get_symbol(i);
-                }
-                cout << res_str << " added by MRH" << endl;
+                //string res_str = "";
+                //for (uint32 i = SIZE-1; i>=0; i++)
+                //{
+                //    res_str += get_symbol(i);
+                //}
+                //cout << res_str << " added by MRH" << endl;
+                cout << next_kmer.get_string_representation() << " added by MRH" << endl;
                 // MRH end
 				if (kmer == next_kmer)
 					count += kxmer_counters[counter_pos];
