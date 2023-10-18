@@ -1,9 +1,9 @@
 /*
   This file is a part of KMC software distributed under GNU GPL 3 licence.
   The homepage of the KMC project is http://sun.aei.polsl.pl/kmc
-  
+
   Authors: Sebastian Deorowicz, Agnieszka Debudaj-Grabysz, Marek Kokot
-  
+
   Version: 3.2.2
   Date   : 2023-03-10
 */
@@ -23,11 +23,11 @@ template<unsigned SIZE> struct CKmer {
 	unsigned long long data[SIZE];
 
 
-	typedef unsigned long long data_t;	
+	typedef unsigned long long data_t;
 	static uint32 KMER_SIZE;
 
 	inline void set(const CKmer<SIZE> &x);
-	
+
 	inline void from_kxmer(const CKmer<SIZE>& x, uint32 _shr, const CKmer<SIZE>& _mask);
 
 	template<unsigned X_SIZE> inline void to_kxmer(CKmer<X_SIZE>& x);
@@ -44,7 +44,7 @@ template<unsigned SIZE> struct CKmer {
 	inline void SHR_insert_2bits(const uint64 x, const uint32 p);
 
 	inline void SHR(const uint32 p);
-	inline void SHL(const uint32 p);	
+	inline void SHL(const uint32 p);
 
 	inline uint64 remove_suffix(const uint32 n) const;
 	inline void set_n_1(const uint32 n);
@@ -60,7 +60,7 @@ template<unsigned SIZE> struct CKmer {
 	inline void clear(void);
 
 	inline char get_symbol(int p);
-	
+
 	inline void fill_T();
 
 	inline void random_init(uint32 pos, uint64 value);
@@ -113,7 +113,7 @@ template<unsigned SIZE> inline void CKmer<SIZE>::from_kxmer(const CKmer<SIZE>& x
 			data[i] = x.data[i] >> (2 * _shr);
 			data[i] += x.data[i+1]<<(64-2*_shr);
 			data[i] &= _mask.data[i];
-		}	
+		}
 #endif
 		data[SIZE - 1] = x.data[SIZE - 1] >> (2 * _shr);
 		data[SIZE - 1] &= _mask.data[SIZE - 1];
@@ -134,7 +134,7 @@ template<unsigned SIZE> inline void CKmer<SIZE>::from_kxmer(const CKmer<SIZE>& x
 
 
 // *********************************************************************
-template<unsigned SIZE> inline void CKmer<SIZE>::mask(const CKmer<SIZE> &x) 
+template<unsigned SIZE> inline void CKmer<SIZE>::mask(const CKmer<SIZE> &x)
 {
 #ifdef USE_META_PROG
 	IterFwd([&](const int &i){
@@ -152,7 +152,7 @@ template<unsigned SIZE> inline uint32 CKmer<SIZE>::end_mask(const uint32 mask)
 	return data[0] & mask;
 }
 // *********************************************************************
-template<unsigned SIZE> inline void CKmer<SIZE>::set_2bits(const uint64 x, const uint32 p) 
+template<unsigned SIZE> inline void CKmer<SIZE>::set_2bits(const uint64 x, const uint32 p)
 {
 	data[p >> 6] += x << (p & 63);
 }
@@ -162,7 +162,7 @@ template<unsigned SIZE> inline uchar CKmer<SIZE>::get_2bits(const uint32 p)
 	return (data[p >> 6] >> (p & 63)) & 3;
 }
 // *********************************************************************
-template<unsigned SIZE> inline void CKmer<SIZE>::SHR_insert_2bits(const uint64 x, const uint32 p) 
+template<unsigned SIZE> inline void CKmer<SIZE>::SHR_insert_2bits(const uint64 x, const uint32 p)
 {
 #ifdef USE_META_PROG
 	IterFwd([&](const int &i){
@@ -220,7 +220,7 @@ template<unsigned SIZE> inline void CKmer<SIZE>::SHL(const uint32 p)
 }
 
 // *********************************************************************
-template<unsigned SIZE> inline void CKmer<SIZE>::SHL_insert_2bits(const uint64 x) 
+template<unsigned SIZE> inline void CKmer<SIZE>::SHL_insert_2bits(const uint64 x)
 {
 #ifdef USE_META_PROG
 	IterRev([&](const int &i){
@@ -239,13 +239,13 @@ template<unsigned SIZE> inline void CKmer<SIZE>::SHL_insert_2bits(const uint64 x
 }
 
 // *********************************************************************
-template<unsigned SIZE> inline uchar CKmer<SIZE>::get_byte(const uint32 p) 
+template<unsigned SIZE> inline uchar CKmer<SIZE>::get_byte(const uint32 p)
 {
-	return (data[p >> 3] >> ((p << 3) & 63)) & 0xFF; 
+	return (data[p >> 3] >> ((p << 3) & 63)) & 0xFF;
 }
 
 // *********************************************************************
-template<unsigned SIZE> inline void CKmer<SIZE>::set_byte(const uint32 p, uchar x) 
+template<unsigned SIZE> inline void CKmer<SIZE>::set_byte(const uint32 p, uchar x)
 {
 	data[p >> 3] += ((uint64) x) << ((p & 7) << 3);
 }
@@ -284,7 +284,7 @@ template<unsigned SIZE> inline void CKmer<SIZE>::clear(void)
 	IterFwd([&](const int &i){
 		data[i] = 0;
 		}, uint_<SIZE-1>());
-#else	
+#else
 	for(uint32 i = 0; i < SIZE; ++i)
 		data[i] = 0;
 #endif
@@ -311,7 +311,7 @@ template<unsigned SIZE> inline void CKmer<SIZE>::set_n_1(const uint32 n)
 		data[i] = ~((uint64) 0);
 
 	uint32 r = n & 63;
-	
+
 	if(r)
 		data[n >> 6] = (1ull << r) - 1;
 }
@@ -386,7 +386,7 @@ template<> struct CKmer<1> {
 	unsigned long long data;
 
 
-	typedef unsigned long long data_t;	
+	typedef unsigned long long data_t;
 	static uint32 KMER_SIZE;
 
 	void set(const CKmer<1> &x);
@@ -407,7 +407,7 @@ template<> struct CKmer<1> {
 	void SHR_insert_2bits(const uint64 x, const uint32 p);
 
 	void SHR(const uint32 p);
-	void SHL(const uint32 p);	
+	void SHL(const uint32 p);
 
 	uint64 remove_suffix(const uint32 n) const;
 	void set_n_1(const uint32 n);
@@ -445,7 +445,7 @@ template<> inline void CKmer<1>::to_kxmer(CKmer<1>& x)
 
 
 // *********************************************************************
-inline void CKmer<1>::mask(const CKmer<1> &x) 
+inline void CKmer<1>::mask(const CKmer<1> &x)
 {
 	data &= x.data;
 }
@@ -457,7 +457,7 @@ inline uint32 CKmer<1>::end_mask(const uint32 mask)
 	return data & mask;
 }
 // *********************************************************************
-inline void CKmer<1>::set(const CKmer<1> &x) 
+inline void CKmer<1>::set(const CKmer<1> &x)
 {
 	data = x.data;
 }
@@ -470,17 +470,17 @@ inline void CKmer<1>::from_kxmer(const CKmer<1>& x, uint32 _shr, const CKmer<1>&
 
 
 // *********************************************************************
-inline void CKmer<1>::set_2bits(const uint64 x, const uint32 p) 
+inline void CKmer<1>::set_2bits(const uint64 x, const uint32 p)
 {
 	data += x << p;
 }
 
 inline uchar CKmer<1>::get_2bits(const uint32 p)
 {
-	return (data >> p) & 3; 
+	return (data >> p) & 3;
 }
 // *********************************************************************
-inline void CKmer<1>::SHR_insert_2bits(const uint64 x, const uint32 p) 
+inline void CKmer<1>::SHR_insert_2bits(const uint64 x, const uint32 p)
 {
 	data >>= 2;
 	data += x << p;
@@ -498,19 +498,19 @@ inline void CKmer<1>::SHL(const uint32 p)
 	data <<= p*2;
 }
 // *********************************************************************
-inline void CKmer<1>::SHL_insert_2bits(const uint64 x) 
+inline void CKmer<1>::SHL_insert_2bits(const uint64 x)
 {
 	data = (data << 2) + x;
 }
 
 // *********************************************************************
-inline uchar CKmer<1>::get_byte(const uint32 p) 
+inline uchar CKmer<1>::get_byte(const uint32 p)
 {
-	return (data >> (p << 3)) & 0xFF; 
+	return (data >> (p << 3)) & 0xFF;
 }
 
 // *********************************************************************
-inline void CKmer<1>::set_byte(const uint32 p, uchar x) 
+inline void CKmer<1>::set_byte(const uint32 p, uchar x)
 {
 	data += ((uint64) x) << (p << 3);
 }
@@ -597,6 +597,17 @@ char CKmer<1>::get_symbol(int p)
 	case 2 : return 'G';
 	default: return 'T';
 	}
+}
+
+// ADDED by MRH
+string CKmer<1>::get_string_representation()
+{
+    string ret_str = ""
+    for (uint32 i = KMER_SIZE-1; i>=0; i++)
+    {
+        ret_str += get_symbol(i);
+    }
+    return ret_str;
 }
 
 // *********************************************************************

@@ -45,7 +45,6 @@ namespace KMC
 
 		KMC::Stage1Results ProcessStage1(const KMC::Stage1Params& stage1Params)
 		{
-			cout << "Modified by MRH" << endl;
 			if (is_selected)
 			{
 				kmc->SetParamsStage1(stage1Params);

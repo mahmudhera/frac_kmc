@@ -1,9 +1,9 @@
 /*
   This file is a part of KMC software distributed under GNU GPL 3 licence.
   The homepage of the KMC project is http://sun.aei.polsl.pl/kmc
-  
+
   Authors: Sebastian Deorowicz, Agnieszka Debudaj-Grabysz, Marek Kokot
-  
+
   Version: 3.2.2
   Date   : 2023-03-10
 */
@@ -51,7 +51,7 @@ private:
 	CBinQueue *bq;
 	CKmerQueue *kq;
 	CMemoryPool *pmm_radix_buf;
-	CMemoryBins *memory_bins;	
+	CMemoryBins *memory_bins;
 	CSortersManager* sorters_manager;
 
 	CKXmerSet<SIZE> kxmer_set;
@@ -59,13 +59,13 @@ private:
 
 	int32 n_bins;
 	int32 bin_id;
-	
+
 	uchar *data;
 	uint64 size;
 	uint64 n_rec;
 
 	uint64 n_plus_x_recs;
-	string desc;	
+	string desc;
 	uint32 kmer_len;
 	uint32 max_x;
 
@@ -73,7 +73,7 @@ private:
 
 	int n_sorting_threads;
 
-	bool both_strands;	
+	bool both_strands;
 	bool without_output;
 
 	CSignatureMapper* s_mapper;
@@ -118,7 +118,7 @@ public:
 	void GetDebugStats(uint64& _sum_n_recs, uint64& _sum_n_plus_x_recs)
 	{
 		_sum_n_recs = sum_n_rec;
-		_sum_n_plus_x_recs = sum_n_plus_x_rec;		
+		_sum_n_plus_x_recs = sum_n_plus_x_rec;
 	}
 
 	void ProcessBins();
@@ -173,21 +173,21 @@ template <unsigned SIZE> CKmerBinSorter<SIZE>::CKmerBinSorter(CKMCParams &Params
 	epd = Queues.epd.get();
 	bq = Queues.bq.get();
 	kq = Queues.kq.get();
-	
+
 	sorters_manager = Queues.sorters_manager.get();
 
 	s_mapper = Queues.s_mapper.get();
 
 	pmm_radix_buf = Queues.pmm_radix_buf.get();
-	
+
 	memory_bins = Queues.memory_bins.get();
 
 	cutoff_min = Params.cutoff_min;
 	cutoff_max = (uint32)Params.cutoff_max;
 	counter_max = (uint32)Params.counter_max;
-	max_x = Params.max_x;	
+	max_x = Params.max_x;
 	without_output = Params.without_output;
-	
+
 	lut_prefix_len = Params.lut_prefix_len;
 
 	output_type = Params.output_type;
@@ -212,24 +212,24 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::ProcessBins()
 	uint64 tmp_size;
 	uint64 tmp_n_rec;
 	CMemDiskFile *file;
-	
+
 	while (sorters_manager->GetNext(bin_id, data, size, n_rec, n_sorting_threads))
 	{
 		// Get bin data
 		bd->read(bin_id, file, desc, tmp_size, tmp_n_rec, n_plus_x_recs);
 
-		// Uncompact the kmers - append truncate prefixes		
+		// Uncompact the kmers - append truncate prefixes
 
 		Expand(tmp_size);
-		
+
 		memory_bins->free(bin_id, CMemoryBins::mba_input_file);
 
 		// Perform sorting of kmers in a bin
 		Sort();
-		
+
 		// Compact the same kmers (occurring at neighbour positions now)
 		Compact();
-				
+
 		sorters_manager->ReturnThreads(n_sorting_threads, bin_id);
 	}
 
@@ -263,7 +263,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::ExpandKmersAll(uint64 tmp_si
 	while (pos < tmp_size)
 	{
 		kmer.clear();
-		additional_symbols = data_p[pos++];		
+		additional_symbols = data_p[pos++];
 		for (uint32 i = 0, kmer_pos = 8 * SIZE - 1; i < kmer_bytes; ++i, --kmer_pos)
 		{
 			kmer.set_byte(kmer_pos, data_p[pos + i]);
@@ -436,7 +436,7 @@ template<unsigned SIZE> uint64 CKmerBinSorter<SIZE>::ExpandKxmerBothParallel(uin
 							break;
 
 						buffer_input[output_start++].set_2bits(x, kmer_len * 2 + max_x * 2);
-						
+
 						x = 0;
 
 						GetNextSymb(symb, byte_shift, pos, data_p);
@@ -456,7 +456,7 @@ template<unsigned SIZE> uint64 CKmerBinSorter<SIZE>::ExpandKxmerBothParallel(uin
 				else
 				{
 					buffer_input[output_start++].set_2bits(x, kmer_len * 2 + max_x * 2);
-					
+
 					x = 0;
 
 					kmer_lower = false;
@@ -476,7 +476,7 @@ template<unsigned SIZE> uint64 CKmerBinSorter<SIZE>::ExpandKxmerBothParallel(uin
 							break;
 
 						buffer_input[output_start++].set_2bits(x, kmer_len * 2 + max_x * 2);
-						
+
 						x = 0;
 
 						GetNextSymb(symb, byte_shift, pos, data_p);
@@ -496,7 +496,7 @@ template<unsigned SIZE> uint64 CKmerBinSorter<SIZE>::ExpandKxmerBothParallel(uin
 				else
 				{
 					buffer_input[output_start++].set_2bits(x, kmer_len * 2 + max_x * 2);
-					
+
 					x = 0;
 
 					buffer_input[output_start].set(kmer);
@@ -509,8 +509,8 @@ template<unsigned SIZE> uint64 CKmerBinSorter<SIZE>::ExpandKxmerBothParallel(uin
 
 		if (byte_shift != 6)
 			++pos;
-	}	
-	
+	}
+
 	uint64 ret = output_end - output_start;
 	/*for (; output_start < output_end; ++output_start)
 		buffer_input[output_start].fill_T();*/
@@ -533,7 +533,7 @@ public:
 		:
 		ptr(ptr),
 		q(q)
-	{		
+	{
 	}
 	void operator()()
 	{
@@ -560,9 +560,9 @@ public:
 };
 
 template <unsigned SIZE> void CKmerBinSorter<SIZE>::ExpandKxmersBoth(uint64 tmp_size)
-{	
+{
 	if (!tmp_size)
-	{		
+	{
 		return;
 	}
 	input_pos = 0;
@@ -571,8 +571,8 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::ExpandKxmersBoth(uint64 tmp_
 	list<pair<uint64, uint64>> l;
 	epd->pop(bin_id, l);
 
-	if (n_sorting_threads > 1)	
-	{	
+	if (n_sorting_threads > 1)
+	{
 		CExpanderPackQueue q(l);
 
 		std::vector<thread> ths;
@@ -582,7 +582,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::ExpandKxmersBoth(uint64 tmp_
 			exp.emplace_back(std::make_unique<CExpandThread<SIZE>>(*this, q));
 			ths.push_back(thread(std::ref(*exp.back().get())));
 		}
-		
+
 		for (auto& t : ths)
 			t.join();
 
@@ -594,7 +594,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::ExpandKxmersBoth(uint64 tmp_
 			filled_regions_size += _ptr->GetFilledRegions().size();
 		}
 		filled_regions.reserve(filled_regions_size);
-		
+
 		for (auto& _ptr : exp)
 		{
 			n_fake_recs_after_expand += _ptr->GetNFakeRecs();
@@ -604,7 +604,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::ExpandKxmersBoth(uint64 tmp_
 
 		//remove fakes
 		sort(filled_regions.begin(), filled_regions.end(), [](const pair<uint64, uint64>& e1, const pair<uint64, uint64>& e2) {return e1.first < e2.first; });
-		
+
 		uint64 first_gap_pos = filled_regions.front().second;
 		uint64 next_reg_desc_pos = 1;
 		uint64 last_elem_pos = filled_regions.back().second - 1;
@@ -623,17 +623,17 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::ExpandKxmersBoth(uint64 tmp_
 
 			buffer_input[first_gap_pos++] = buffer_input[last_elem_pos--];
 		}
-		
-		n_plus_x_recs -= n_fake_recs_after_expand;				
+
+		n_plus_x_recs -= n_fake_recs_after_expand;
 	}
 	else
 	{
 		l.clear();
 		auto n_fake_recs = ExpandKxmerBothParallel(0, tmp_size, 0, n_plus_x_recs);
 		n_plus_x_recs -= n_fake_recs;
-		
+
 	}
-	
+
 	input_pos = n_plus_x_recs;
 }
 
@@ -769,14 +769,14 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::Sort()
 		rec_len = (kmer_len + 3) / 4;
 	}
 
-	sum_n_plus_x_rec += n_plus_x_recs;	
+	sum_n_plus_x_rec += n_plus_x_recs;
 	sum_n_rec += n_rec;
-	
+
 	sort_func(buffer_input, buffer_tmp, sort_rec, rec_len - 1, n_sorting_threads, pmm_radix_buf);
 	if (rec_len % 2)
 		buffer = buffer_tmp;
 	else
-		buffer = buffer_input;	
+		buffer = buffer_input;
 }
 
 //----------------------------------------------------------------------------------
@@ -846,7 +846,7 @@ template<unsigned SIZE> void CKmerBinSorter<SIZE>::PreCompactKxmers(uint64& comp
 	uint32 n_threads = n_sorting_threads;
 	vector<thread> threads;
 	vector<pair<uint64, uint64>> start_end(n_threads);
-	uint64 total_recs = n_plus_x_recs;		
+	uint64 total_recs = n_plus_x_recs;
 	for (uint32 idx = 0; idx < n_threads; ++idx)
 	{
 		threads.push_back(thread([idx, n_threads, total_recs, &start_end, this]
@@ -972,7 +972,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 		kxmer_counters = (uint32*)raw_kxmer_counters;
 		uint64 compacted_count;
 		PreCompactKxmers(compacted_count);
-		
+
 		uint64 pos[5];//pos[symb] is first position where symb occur (at first position of k+x-mer) and pos[symb+1] is first position where symb is not starting symbol of k+x-mer
 		pos[0] = 0;
 		pos[4] = compacted_count;
@@ -980,21 +980,21 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 			pos[i] = FindFirstSymbOccur(pos[i - 1], compacted_count, 0, i);
 
 		if (n_sorting_threads > 1)
-		{						
-			CKXmerSetMultiThreaded<SIZE> kxmer_set_multithreaded(buffer, kxmer_counters, compacted_count, 
+		{
+			CKXmerSetMultiThreaded<SIZE> kxmer_set_multithreaded(buffer, kxmer_counters, compacted_count,
 				cutoff_min, cutoff_max, counter_max, kmer_len, lut_prefix_len, lut, out_buffer, n_sorting_threads);
 
 			for (uint32 i = 1; i < 5; ++i)
 				InitKXMerSetMultithreaded(kxmer_set_multithreaded, pos[i - 1], pos[i], max_x + 2 - i, i);
 
 			kxmer_set_multithreaded.Process(without_output, output_type);
-		
-			kxmer_set_multithreaded.GetStats(n_unique, n_cutoff_min, n_cutoff_max, n_total);	
-			output_packs_desc = std::move(kxmer_set_multithreaded.GetOutputPacksDesc());			
+
+			kxmer_set_multithreaded.GetStats(n_unique, n_cutoff_min, n_cutoff_max, n_total);
+			output_packs_desc = std::move(kxmer_set_multithreaded.GetOutputPacksDesc());
 		}
 		else
 		{
-			uint64 out_pos = 0; 
+			uint64 out_pos = 0;
 			for (uint32 i = 1; i < 5; ++i)
 				InitKXMerSet(pos[i - 1], pos[i], max_x + 2 - i, i);
 
@@ -1013,6 +1013,9 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 			//rest
 			while (kxmer_set.get_min(counter_pos, next_kmer))
 			{
+                // MRH start
+                cout << next_kmer.get_string_representation();
+                // MRH end
 				if (kmer == next_kmer)
 					count += kxmer_counters[counter_pos];
 				else
@@ -1070,7 +1073,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 				n_cutoff_max++;
 			else
 			{
-				
+
 				if (count > counter_max)
 					count = counter_max;
 
@@ -1110,7 +1113,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 	}
 
 
-	// Push the sorted and compacted kmer bin to a queue in a form ready to be stored to HDD	
+	// Push the sorted and compacted kmer bin to a queue in a form ready to be stored to HDD
 	kq->push(bin_id, out_buffer, output_packs_desc, raw_lut, lut_size, n_unique, n_cutoff_min, n_cutoff_max, n_total);
 
 	if (buffer_input)
@@ -1152,7 +1155,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKmers()
 	uint64 out_pos = 0;
 	uint32 count;
 	CKmer<SIZE> *act_kmer;
-	
+
 	n_unique = 0;
 	n_cutoff_min = 0;
 	n_cutoff_max = 0;
@@ -1298,7 +1301,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::Compact()
 template <unsigned SIZE> class CWKmerBinSorter {
 	std::unique_ptr<CKmerBinSorter<SIZE>> kbs;
 
-public:	
+public:
 	CWKmerBinSorter(CKMCParams &Params, CKMCQueues &Queues, SortFunction<CKmer<SIZE>> sort_func);
 	void GetDebugStats(uint64& _sum_n_recs, uint64& _sum_n_plus_x_recs)
 	{
