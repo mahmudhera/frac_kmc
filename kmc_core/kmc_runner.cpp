@@ -17,7 +17,7 @@
 #include <memory>
 
 namespace KMC
-{	
+{
 	//----------------------------------------------------------------------------------
 // Application class
 // Template parameters:
@@ -45,6 +45,7 @@ namespace KMC
 
 		KMC::Stage1Results ProcessStage1(const KMC::Stage1Params& stage1Params)
 		{
+			cout << "Modified by MRH" << endl;
 			if (is_selected)
 			{
 				kmc->SetParamsStage1(stage1Params);
@@ -109,7 +110,7 @@ namespace KMC
 
 	void CerrPercentProgressObserver::SetLabel(const std::string& label)
 	{
-		this->label = label;		
+		this->label = label;
 	}
 	void CerrPercentProgressObserver::ProgressChanged(int newValue)
 	{
@@ -126,7 +127,7 @@ namespace KMC
 
 	void NullPercentProgressObserver::ProgressChanged(int newValue)
 	{
-		
+
 	}
 
 	void CerrProgressObserver::Start(const std::string& /*name*/)
@@ -192,7 +193,7 @@ namespace KMC
 		{
 			std::ostringstream err_msg;
 			err_msg << "Wrong parameter: k must be from range <" << MIN_K << "," << MAX_K << ">";
-			throw std::runtime_error(err_msg.str());			
+			throw std::runtime_error(err_msg.str());
 		}
 		this->kmerLen = kmerLen;
 		return *this;
@@ -224,7 +225,7 @@ namespace KMC
 		this->signatureLen = signatureLen;
 		return *this;
 	}
-	
+
 	Stage1Params& Stage1Params::SetHomopolymerCompressed(bool homopolymerCompressed)
 	{
 		this->homopolymerCompressed = homopolymerCompressed;
@@ -251,7 +252,7 @@ namespace KMC
 		{
 			std::ostringstream err_msg;
 			err_msg << "Wrong parameter: number of bins must be in range <" << MIN_N_BINS << "," << MAX_N_BINS << ">";
-			throw std::runtime_error(err_msg.str());			
+			throw std::runtime_error(err_msg.str());
 		}
 		this->nBins = nBins;
 		return *this;
@@ -262,18 +263,18 @@ namespace KMC
 		{
 			std::ostringstream err_msg;
 			err_msg << "Wrong parameter: number of reading thread must be from range <" << MIN_SF << "," << MAX_SF << ">";
-			throw std::runtime_error(err_msg.str());			
+			throw std::runtime_error(err_msg.str());
 		}
 		this->nReaders = nReaders;
 		return *this;
 	}
 	Stage1Params& Stage1Params::SetNSplitters(uint32_t nSplitters)
-	{		
+	{
 		if (nSplitters < MIN_SP || nSplitters > MAX_SP)
 		{
 			std::ostringstream err_msg;
 			err_msg << "Wrong parameter: number of splitting threads must be in range <" << MIN_SP << "," << MAX_SP << ">";
-			throw std::runtime_error(err_msg.str());			
+			throw std::runtime_error(err_msg.str());
 		}
 		this->nSplitters = nSplitters;
 		return *this;
@@ -327,7 +328,7 @@ namespace KMC
 		{
 			std::ostringstream err_msg;
 			err_msg << "Wrong parameter: number of threads for 2nd stage must be in range <" << MIN_SR << "," << MAX_SR << ">";
-			throw std::runtime_error(err_msg.str());					
+			throw std::runtime_error(err_msg.str());
 		}
 		this->nThreads = nThreads;
 		return *this;
@@ -351,7 +352,7 @@ namespace KMC
 	{
 		this->cutoffMax = cutoffMax;
 		return *this;
-	}	
+	}
 	Stage2Params& Stage2Params::SetOutputFileName(const std::string& outputFileName)
 	{
 		this->outputFileName = outputFileName;
@@ -366,7 +367,7 @@ namespace KMC
 	{
 		this->withoutOutput = withoutOutput;
 		return *this;
-	}	
+	}
 	Stage2Params& Stage2Params::SetStrictMemoryNSortingThreadsPerSorters(uint32_t strictMemoryNSortingThreadsPerSorters)
 	{
 		if (strictMemoryNSortingThreadsPerSorters < MIN_SMSO || strictMemoryNSortingThreadsPerSorters > MAX_SMSO)
@@ -412,7 +413,7 @@ namespace KMC
 			stage1WasCalled = true;
 #ifdef _WIN32
 			_setmaxstdio(2040);
-#endif			
+#endif
 			app = std::make_unique<CApplication<KMER_WORDS>>(stage1Params.GetKmerLen());
 			return app->ProcessStage1(stage1Params);
 		}
@@ -427,15 +428,15 @@ namespace KMC
 
 	Runner::Runner() : pImpl(std::make_unique<RunnerImpl>()){ };
 	Runner::~Runner() = default; //must be defined here to make pImpl idiom work
-	
+
 
 	Stage1Results Runner::RunStage1(const Stage1Params& params)
-	{		
+	{
 		return pImpl->RunStage1(params);
 	}
 
-	Stage2Results Runner::RunStage2(const Stage2Params& params)	
-	{		
+	Stage2Results Runner::RunStage2(const Stage2Params& params)
+	{
 		return pImpl->RunStage2(params);
 	}
 
