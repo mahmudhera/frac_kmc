@@ -237,7 +237,7 @@ int main(int argc, char* argv[])
 			uint32_t seed = 0;
 			MurmurHash3_x64_128 ( str, sizeof(char)*_kmer_length, seed, out);
 			str[_kmer_length] = '\0';
-			std::cout << str << ' ' << out[0] << ' ' << out[1] << endl;
+			std::cout << str << ' ' << out[0] << ' ' << out[1] << std::endl;
 		}
 
 		fclose(out_file);
