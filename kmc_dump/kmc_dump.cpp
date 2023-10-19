@@ -2,7 +2,7 @@
   This file is a part of KMC software distributed under GNU GPL 3 licence.
   The homepage of the KMC project is http://sun.aei.polsl.pl/kmc
 
-  This file demonstrates the example usage of kmc_api software. 
+  This file demonstrates the example usage of kmc_api software.
   It reads kmer_counter's output and prints kmers to an output file.
 
   Authors: Sebastian Deorowicz, Agnieszka Debudaj-Grabysz, Marek Kokot
@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
 	for(i = 1; i < argc; ++i)
 	{
 		if(argv[i][0] == '-')
-		{	
+		{
 			if(strncmp(argv[i], "-ci", 3) == 0)
 				min_count_to_set = atoi(&argv[i][3]);
 			else if(strncmp(argv[i], "-cx", 3) == 0)
@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
 	}
 
 	if(argc - i < 2)
-	{ 
+	{
 		print_info();
 		return EXIT_FAILURE;
 	}
@@ -110,19 +110,19 @@ int main(int argc, char* argv[])
 
 		kmer_data_base.Info(_kmer_length, _mode, _counter_size, _lut_prefix_length, _signature_len, _min_count, _max_count, _total_kmers);
 
-		
+
 		//std::string str;
 		char str[1024];
 		uint32 counter_len;
-		
+
 		CKmerAPI kmer_object(_kmer_length);
-		
+
 		if(min_count_to_set)
 		if (!(kmer_data_base.SetMinCount(min_count_to_set)))
 				return EXIT_FAILURE;
 		if(max_count_to_set)
 		if (!(kmer_data_base.SetMaxCount(max_count_to_set)))
-				return EXIT_FAILURE;	
+				return EXIT_FAILURE;
 
 		uint64 counter;
 		while (kmer_data_base.ReadNextKmer(kmer_object, counter))
@@ -132,16 +132,21 @@ int main(int argc, char* argv[])
 			counter_len = CNumericConversions::Int2PChar(counter, (uchar*)str + _kmer_length + 1);
 			str[_kmer_length + 1 + counter_len] = '\n';
 			fwrite(str, 1, _kmer_length + counter_len + 2, out_file);
+			str[0] = 'M';
+			str[1] = 'R';
+			str[2] = 'H';
+			str[3] = '\n';
+			fwrite(str, 1, 4, out_file);
 		}
-	
+
 		fclose(out_file);
 		kmer_data_base.Close();
 	}
 
-	return EXIT_SUCCESS; 
+	return EXIT_SUCCESS;
 }
 // -------------------------------------------------------------------------
-// Print execution options 
+// Print execution options
 // -------------------------------------------------------------------------
 void print_info(void)
 {
