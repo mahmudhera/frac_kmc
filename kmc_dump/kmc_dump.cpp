@@ -14,6 +14,7 @@
 #include <iostream>
 #include "../kmc_api/kmc_file.h"
 #include "nc_utils.h"
+#include "MurMurHash3.h"
 
 
 void print_info(void);
@@ -132,11 +133,12 @@ int main(int argc, char* argv[])
 			counter_len = CNumericConversions::Int2PChar(counter, (uchar*)str + _kmer_length + 1);
 			str[_kmer_length + 1 + counter_len] = '\n';
 			fwrite(str, 1, _kmer_length + counter_len + 2, out_file);
-			str[0] = 'M';
-			str[1] = 'R';
-			str[2] = 'H';
-			str[3] = '\n';
-			fwrite(str, 1, 4, out_file);
+
+			uint64_t out[2] = {0};
+			uint32_t seed = 0;
+			MurmurHash3_x64_128 ( str, sizeof(char)*_kmer_length, seed, out);
+			str[_kmer_length] = '\0';
+			std::cout << str << ' ' << out[0] << ' ' << out[1] << endl;
 		}
 
 		fclose(out_file);
