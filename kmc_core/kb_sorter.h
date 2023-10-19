@@ -1022,7 +1022,8 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
                 //}
                 //cout << res_str << " added by MRH" << endl;
 				std::ofstream myfile;
-				myfile.open("mrh.log");
+				std::string mrh_filename = "mrh.log";
+				myfile.open(mrh_filename.c_str());
                 myfile << next_kmer.get_string_representation() << " added by MRH" << endl;
 				myfile.close();
                 // MRH end
@@ -1174,7 +1175,8 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKmers()
 	if (n_rec)			// non-empty bin
 	{
 		std::ofstream myfile;
-		myfile.open("mrh.log", "a");
+		std::string mrh_filename = "mrh.log";
+		myfile.open(mrh_filename.c_str());
 		myfile << " added by MRH" << endl;
 		myfile.close();
 
