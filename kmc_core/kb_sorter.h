@@ -28,6 +28,7 @@
 #include <functional>
 #include <cstddef>
 #include <set>
+#include <fstream>
 
 
 #include "kxmer_set.h"
@@ -1020,7 +1021,10 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
                 //    res_str += get_symbol(i);
                 //}
                 //cout << res_str << " added by MRH" << endl;
-                std::cout << next_kmer.get_string_representation() << " added by MRH" << endl;
+				std::ofstream myfile;
+				myfile.open("mrh.log");
+                myfile << next_kmer.get_string_representation() << " added by MRH" << endl;
+				myfile.close();
                 // MRH end
 				if (kmer == next_kmer)
 					count += kxmer_counters[counter_pos];
