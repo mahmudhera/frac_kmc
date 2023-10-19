@@ -225,24 +225,26 @@ int main(int argc, char* argv[])
 				return EXIT_FAILURE;
 
 		uint64 counter;
+
+		// MRH code
+		uint64_t largest_value = 0xFFFFFFFFFFFFFFFF;
+		double scaled = 1000;
+		uint64_t threshold = largest_value/scaled;
+
 		while (kmer_data_base.ReadNextKmer(kmer_object, counter))
 		{
 			kmer_object.to_string(str);
 			str[_kmer_length] = '\t';
 			counter_len = CNumericConversions::Int2PChar(counter, (uchar*)str + _kmer_length + 1);
 			str[_kmer_length + 1 + counter_len] = '\n';
-			fwrite(str, 1, _kmer_length + counter_len + 2, out_file);
 
 			// MRH code
-			uint64_t largest_value = 0xFFFFFFFFFFFFFFFF;
-			double scaled = 2;
-			uint64_t threshold = largest_value/scaled;
-			std::cout << "Largest: " << threshold << std::endl;
 			uint64_t out[2] = {0};
-			uint32_t seed = 0;
-			MurmurHash3_x64_128 ( str, sizeof(char)*_kmer_length, seed, out);
-			str[_kmer_length] = '\0';
-			std::cout << str << ' ' << out[0] << ' ' << out[1] << ' ' << (out[0]<threshold) << std::endl;
+			MurmurHash3_x64_128 ( str, sizeof(char)*_kmer_length, 0, out);
+			if (out[0]<threshold)
+			{
+				fwrite(str, 1, _kmer_length + counter_len + 2, out_file);
+			}
 		}
 
 		fclose(out_file);
