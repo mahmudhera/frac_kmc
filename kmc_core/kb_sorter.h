@@ -1173,6 +1173,11 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKmers()
 
 	if (n_rec)			// non-empty bin
 	{
+		std::ofstream myfile;
+		myfile.open("mrh.log", "a");
+		myfile << " added by MRH" << endl;
+		myfile.close();
+
 		act_kmer = &buffer[0];
 		count = 1;
 
