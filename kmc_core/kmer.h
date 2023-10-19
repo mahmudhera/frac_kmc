@@ -622,9 +622,20 @@ char CKmer<1>::get_symbol(int p)
 std::string CKmer<1>::get_string_representation()
 {
     std::string ret_str = "";
+	unsigned long long data_copy = data;
     for (uint32 i = KMER_SIZE-1; i>=0; i++)
     {
-        ret_str += get_symbol(i);
+		uint32 x = data_copy & 0x03;
+		data_copy = data_copy >> 2;
+		char ch;
+		switch(x)
+		{
+		case 0 : ch = 'A';
+		case 1 : ch = 'C';
+		case 2 : ch = 'G';
+		default: ch = 'T';
+		}
+        ret_str += ch;
     }
     return ret_str;
 }

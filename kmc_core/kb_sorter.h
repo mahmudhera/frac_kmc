@@ -1020,7 +1020,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
                 //    res_str += get_symbol(i);
                 //}
                 //cout << res_str << " added by MRH" << endl;
-                //cout << next_kmer.get_string_representation() << " added by MRH" << endl;
+                std::cout << next_kmer.get_string_representation() << " added by MRH" << endl;
                 // MRH end
 				if (kmer == next_kmer)
 					count += kxmer_counters[counter_pos];
