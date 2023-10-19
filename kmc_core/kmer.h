@@ -66,7 +66,7 @@ template<unsigned SIZE> struct CKmer {
 	inline void random_init(uint32 pos, uint64 value);
 
     // Added ny MRH
-    inline string get_string_representation();
+    inline std::string get_string_representation();
 };
 
 template <unsigned SIZE> uint32 CKmer<SIZE>::KMER_SIZE = SIZE;
@@ -367,9 +367,9 @@ template<unsigned SIZE> inline char CKmer<SIZE>::get_symbol(int p)
 }
 
 // ADDED by MRH
-template<unsigned SIZE> inline string CKmer<SIZE>::get_string_representation()
+template<unsigned SIZE> inline std::string CKmer<SIZE>::get_string_representation()
 {
-    string ret_str = "";
+    std::string ret_str = "";
     for (uint32 i = KMER_SIZE-1; i>=0; i++)
     {
         ret_str += get_symbol(i);
@@ -445,7 +445,7 @@ template<> struct CKmer<1> {
 	inline void random_init(uint32 pos, uint64 value);
 
     // MRH
-    inline string get_string_representation();
+    inline std::string get_string_representation();
 };
 
 
@@ -619,9 +619,9 @@ char CKmer<1>::get_symbol(int p)
 }
 
 // ADDED by MRH
-string CKmer<1>::get_string_representation()
+std::string CKmer<1>::get_string_representation()
 {
-    string ret_str = "";
+    std::string ret_str = "";
     for (uint32 i = KMER_SIZE-1; i>=0; i++)
     {
         ret_str += get_symbol(i);
