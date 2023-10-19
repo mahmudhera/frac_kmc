@@ -233,11 +233,16 @@ int main(int argc, char* argv[])
 			str[_kmer_length + 1 + counter_len] = '\n';
 			fwrite(str, 1, _kmer_length + counter_len + 2, out_file);
 
+			// MRH code
+			uint64_t largest_value = 0xFFFFFFFFFFFFFFFF;
+			double scaled = 2;
+			uint64_t threshold = largest_value/scaled;
+			std::cout << "Largest: " << threshold << std::endl;
 			uint64_t out[2] = {0};
 			uint32_t seed = 0;
 			MurmurHash3_x64_128 ( str, sizeof(char)*_kmer_length, seed, out);
 			str[_kmer_length] = '\0';
-			std::cout << str << ' ' << out[0] << ' ' << out[1] << std::endl;
+			std::cout << str << ' ' << out[0] << ' ' << out[1] << ' ' << (out[0]<threshold) << std::endl;
 		}
 
 		fclose(out_file);
