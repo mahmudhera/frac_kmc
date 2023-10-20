@@ -1021,11 +1021,11 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
                 //    res_str += get_symbol(i);
                 //}
                 //cout << res_str << " added by MRH" << endl;
-				std::ofstream myfile;
-				std::string mrh_filename = "mrh.log";
-				myfile.open(mrh_filename.c_str());
-                myfile << next_kmer.get_string_representation() << " added by MRH" << endl;
-				myfile.close();
+				//std::ofstream myfile;
+				//std::string mrh_filename = "mrh.log";
+				//myfile.open(mrh_filename.c_str());
+                //myfile << next_kmer.get_string_representation() << " added by MRH" << endl;
+				//myfile.close();
                 // MRH end
 				if (kmer == next_kmer)
 					count += kxmer_counters[counter_pos];
@@ -1037,6 +1037,10 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 						n_cutoff_min++;
 					else if (count >cutoff_max)
 						n_cutoff_max++;
+					// by MRH
+					else if (1 == 1) {
+						;
+					}
 					else
 					{
 						if (count > counter_max)
@@ -1082,6 +1086,10 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 				n_cutoff_min++;
 			else if (count >cutoff_max)
 				n_cutoff_max++;
+			// by MRH
+			else if (1 == 1) {
+				;
+			}
 			else
 			{
 
@@ -1205,6 +1213,10 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKmers()
 					n_unique++;
 					count = 1;
 				}
+				// by MRH
+				else if (1 == 1) {
+					;
+				}
 				else
 				{
 					if (count > counter_max)
@@ -1251,6 +1263,10 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKmers()
 		else if (count > cutoff_max)
 		{
 			n_cutoff_max++;
+		}
+		// by MRH
+		else if (1 == 1) {
+			;
 		}
 		else
 		{
