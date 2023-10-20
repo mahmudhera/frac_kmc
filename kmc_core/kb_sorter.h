@@ -1177,7 +1177,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKmers()
 		std::ofstream myfile;
 		std::string mrh_filename = "mrh.log";
 		myfile.open(mrh_filename.c_str());
-		myfile << " added by MRH" << endl;
+		myfile << " added by MRH\n";
 		myfile.close();
 
 		act_kmer = &buffer[0];
