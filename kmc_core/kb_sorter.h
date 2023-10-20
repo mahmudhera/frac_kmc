@@ -1037,10 +1037,6 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 						n_cutoff_min++;
 					else if (count >cutoff_max)
 						n_cutoff_max++;
-					// by MRH
-					else if (1 == 1) {
-						;
-					}
 					else
 					{
 						if (count > counter_max)
