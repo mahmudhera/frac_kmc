@@ -370,7 +370,7 @@ template<unsigned SIZE> inline char CKmer<SIZE>::get_symbol(int p)
 template<unsigned SIZE> inline std::string CKmer<SIZE>::get_string_representation(int kmer_len)
 {
     std::string ret_str = "";
-    for (int32 i = kmer_len-1; i>=0; i++)
+    for (int32 i = kmer_len-1; i>=0; i--)
     {
         ret_str += get_symbol(i);
     }
@@ -622,7 +622,7 @@ char CKmer<1>::get_symbol(int p)
 std::string CKmer<1>::get_string_representation(int kmer_len)
 {
     std::string ret_str = "";
-    for (int32 i = kmer_len-1; i>=0; i++)
+    for (int32 i = kmer_len-1; i>=0; i--)
     {
         ret_str += get_symbol(i);
     }
