@@ -1014,14 +1014,14 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 			count = kxmer_counters[counter_pos];
 			
 			// MRH start
-        	std::cout << kmer.get_string_representation(kmer_len) << endl;
+        	std::cout << kmer.get_string_representation(kmer_len)  << " Place3" << endl;
             // MRH end
 
 			//rest
 			while (kxmer_set.get_min(counter_pos, next_kmer))
 			{
                 // MRH start
-                std::cout << next_kmer.get_string_representation(kmer_len) << endl;
+                std::cout << next_kmer.get_string_representation(kmer_len)  << " Place2" << endl;
                 // MRH end
 				if (kmer == next_kmer)
 					count += kxmer_counters[counter_pos];
@@ -1072,7 +1072,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 			}
 
 			// MRH start
-			std::cout << next_kmer.get_string_representation(kmer_len) << endl;
+			std::cout << next_kmer.get_string_representation(kmer_len) << " Place1" << endl;
 			// MRH end
 			//last one
 			++n_unique;
@@ -1240,7 +1240,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKmers()
 		}
 
 		// MRH start
-		std::cout << act_kmer->get_string_representation(kmer_len) << endl;
+		std::cout << act_kmer->get_string_representation(kmer_len)  << " Place4" << endl;
 		// MRH end
 		if (count < cutoff_min)
 		{
