@@ -147,12 +147,14 @@ int main(int argc, char* argv[])
 	uint32 max_count_to_set = 0;
 	std::string input_file_name;
 	std::string output_file_name;
+	uint32 seed = 0;
+	uint32 scaled = 1;
 
 	FILE * out_file;
 	//------------------------------------------------------------
 	// Parse input parameters
 	//------------------------------------------------------------
-	if(argc < 3)
+	if(argc < 5)
 	{
 		print_info();
 		return EXIT_FAILURE;
@@ -166,6 +168,12 @@ int main(int argc, char* argv[])
 				min_count_to_set = atoi(&argv[i][3]);
 			else if(strncmp(argv[i], "-cx", 3) == 0)
 					max_count_to_set = atoi(&argv[i][3]);
+			else if(strncmp(argv[i], "-s", 2) == 0)
+					seed = atoi(&argv[i][2]);
+			else if(strncmp(argv[i], "-scaled", 7) == 0)
+					scaled = atoi(&argv[i][7]);
+			else
+				break;
 		}
 		else
 			break;
@@ -228,8 +236,7 @@ int main(int argc, char* argv[])
 
 		// MRH code
 		uint64_t largest_value = 0xFFFFFFFFFFFFFFFF;
-		double scaled = 1000;
-		uint64_t threshold = largest_value/scaled;
+		uint64_t threshold = (double)(largest_value)/(double)(scaled);
 
 		while (kmer_data_base.ReadNextKmer(kmer_object, counter))
 		{
@@ -240,7 +247,7 @@ int main(int argc, char* argv[])
 
 			// MRH code
 			uint64_t out[2] = {0};
-			MurmurHash3_x64_128 ( str, sizeof(char)*_kmer_length, 0, out);
+			MurmurHash3_x64_128 ( str, sizeof(char)*_kmer_length, seed, out);
 			str[_kmer_length] = '\0';
 			std::cout << str << " hashed to " << out[0] << std::endl;
 			str[_kmer_length] = '\t';
@@ -268,6 +275,8 @@ void print_info(void)
 			  << "Options:\n"
 			  << "-ci<value> - exclude k-mers occurring less than <value> times\n"
 			  << "-cx<value> - exclude k-mers occurring more of than <value> times\n";
+			  << "-s<value>  - seed to be used by mmh3\n";
+			  << "-scaled<value>  - scaled for FracMinHash\n";
 }
 
 // ***** EOF
