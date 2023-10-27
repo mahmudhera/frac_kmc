@@ -241,6 +241,9 @@ int main(int argc, char* argv[])
 			// MRH code
 			uint64_t out[2] = {0};
 			MurmurHash3_x64_128 ( str, sizeof(char)*_kmer_length, 0, out);
+			str[_kmer_length] = '\0';
+			cout << str << " hashed to " << out[0] << endl;
+			str[_kmer_length] = '\t';
 			if (out[0]<threshold)
 			{
 				fwrite(str, 1, _kmer_length + counter_len + 2, out_file);
