@@ -1012,6 +1012,11 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 			//first
 			kxmer_set.get_min(counter_pos, kmer);
 			count = kxmer_counters[counter_pos];
+			
+			// MRH start
+                std::cout << next_kmer.get_string_representation(kmer_len) << endl;
+            // MRH end
+
 			//rest
 			while (kxmer_set.get_min(counter_pos, next_kmer))
 			{
