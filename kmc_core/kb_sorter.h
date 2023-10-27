@@ -29,6 +29,7 @@
 #include <cstddef>
 #include <set>
 #include <fstream>
+#include <iostream>
 
 
 #include "kxmer_set.h"
@@ -1015,17 +1016,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 			while (kxmer_set.get_min(counter_pos, next_kmer))
 			{
                 // MRH start
-                //string res_str = "";
-                //for (uint32 i = SIZE-1; i>=0; i++)
-                //{
-                //    res_str += get_symbol(i);
-                //}
-                //cout << res_str << " added by MRH" << endl;
-				//std::ofstream myfile;
-				//std::string mrh_filename = "mrh.log";
-				//myfile.open(mrh_filename.c_str());
-                //myfile << next_kmer.get_string_representation() << " added by MRH" << endl;
-				//myfile.close();
+                std::cout << next_kmer.get_string_representation(kmer_len) << endl;
                 // MRH end
 				if (kmer == next_kmer)
 					count += kxmer_counters[counter_pos];
@@ -1075,6 +1066,9 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 				}
 			}
 
+			// MRH start
+			std::cout << next_kmer.get_string_representation(kmer_len) << endl;
+			// MRH end
 			//last one
 			++n_unique;
 			n_total += count;
@@ -1082,10 +1076,6 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 				n_cutoff_min++;
 			else if (count >cutoff_max)
 				n_cutoff_max++;
-			// by MRH
-			else if (1 == 1) {
-				;
-			}
 			else
 			{
 
@@ -1178,11 +1168,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKmers()
 
 	if (n_rec)			// non-empty bin
 	{
-		std::ofstream myfile;
-		std::string mrh_filename = "mrh.log";
-		myfile.open(mrh_filename.c_str());
-		myfile << " added by MRH\n";
-		myfile.close();
+
 
 		act_kmer = &buffer[0];
 		count = 1;
@@ -1208,10 +1194,6 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKmers()
 					n_cutoff_max++;
 					n_unique++;
 					count = 1;
-				}
-				// by MRH
-				else if (1 == 1) {
-					;
 				}
 				else
 				{
@@ -1252,6 +1234,9 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKmers()
 			}
 		}
 
+		// MRH start
+		std::cout << act_kmer->get_string_representation(kmer_len) << endl;
+		// MRH end
 		if (count < cutoff_min)
 		{
 			n_cutoff_min++;
@@ -1259,10 +1244,6 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKmers()
 		else if (count > cutoff_max)
 		{
 			n_cutoff_max++;
-		}
-		// by MRH
-		else if (1 == 1) {
-			;
 		}
 		else
 		{

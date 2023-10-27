@@ -3,6 +3,7 @@
 uint32 CKmer<1>::KMER_SIZE = 1;
 
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -117,15 +118,13 @@ int main() {
     unsigned char read_buffer[20] = {0};
     int read_buffer_pos = 0;
     int32 kmer_bytes = 2;
+    int32 kmer_len = 11;
 
-    for (int32 j = (int32)kmer_bytes - 1; j >= 0; --j)
-		read_buffer[read_buffer_pos++] = kmer.get_byte(j);
-
-    for (int i = 0; i < 4; i++) cout << (int)read_buffer[i] << " ";
-    cout << endl;
+    string str_rep = kmer.get_string_representation(kmer_len);
+    cout << kmer.get_string_representation(5) << endl;
 
     uint64_t out[2] = {0};
-    MurmurHash3_x64_128 ( read_buffer, kmer_bytes, 0, out);
+    MurmurHash3_x64_128 ( str_rep.c_str(), kmer_len, 0, out );
 
     cout << out[0] << " " << out[1] << endl;
 

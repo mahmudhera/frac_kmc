@@ -17,6 +17,7 @@
 #include "meta_oper.h"
 #include <string>
 #include <random>
+#include <iostream>
 
 typedef uint32_t uint32;
 typedef uint64_t uint64;
@@ -75,7 +76,7 @@ template<unsigned SIZE> struct CKmer {
 	inline void random_init(uint32 pos, uint64 value);
 
     // Added ny MRH
-    inline std::string get_string_representation();
+	std::string get_string_representation(uint32);
 };
 
 template <unsigned SIZE> uint32 CKmer<SIZE>::KMER_SIZE = SIZE;
@@ -376,12 +377,12 @@ template<unsigned SIZE> inline char CKmer<SIZE>::get_symbol(int p)
 }
 
 // ADDED by MRH
-template<unsigned SIZE> inline std::string CKmer<SIZE>::get_string_representation()
+template<unsigned SIZE> std::string CKmer<SIZE>::get_string_representation(uint32 kmer_len)
 {
     std::string ret_str = "";
-    for (uint32 i = KMER_SIZE-1; i>=0; i++)
+    for (int32 i = kmer_len-1; i>=0; i--)
     {
-        ret_str += get_symbol(i);
+        ret_str += this->get_symbol(i);
     }
     return ret_str;
 }
@@ -454,7 +455,7 @@ template<> struct CKmer<1> {
 	inline void random_init(uint32 pos, uint64 value);
 
     // MRH
-    inline std::string get_string_representation();
+    std::string get_string_representation(uint32);
 };
 
 
@@ -628,23 +629,12 @@ char CKmer<1>::get_symbol(int p)
 }
 
 // ADDED by MRH
-std::string CKmer<1>::get_string_representation()
+std::string CKmer<1>::get_string_representation(uint32 kmer_len)
 {
     std::string ret_str = "";
-	unsigned long long data_copy = data;
-    for (uint32 i = 16; i>=0; i--)
+	for (int32 i = kmer_len-1; i>=0; i--)
     {
-		uint32 x = data_copy & 0x03;
-		data_copy = data_copy >> 2;
-		char ch;
-		switch(x)
-		{
-		case 0 : ch = 'A';
-		case 1 : ch = 'C';
-		case 2 : ch = 'G';
-		default: ch = 'T';
-		}
-        ret_str += ch;
+        ret_str += this->get_symbol(i);
     }
     return ret_str;
 }
