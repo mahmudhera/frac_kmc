@@ -15,6 +15,8 @@
 #include "../kmc_api/kmc_file.h"
 #include "nc_utils.h"
 
+using namespace std;
+
 #define ROTL64(x,y)	rotl64(x,y)
 #define BIG_CONSTANT(x) (x)
 
