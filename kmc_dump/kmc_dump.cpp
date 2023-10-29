@@ -164,6 +164,13 @@ int main(int argc, char* argv[])
 
 	for(i = 1; i < argc; ++i)
 	{
+		if (strncmp(argv[i], "-scaled", 7) == 0) {
+			scaled = atoi(&argv[i][7]);
+		}
+		if(strncmp(argv[i], "-s", 2) == 0) {
+			seed = atoi(&argv[i][2]);
+		}
+
 		if(argv[i][0] == '-')
 		{
 			if(strncmp(argv[i], "-ci", 3) == 0)
