@@ -128,5 +128,14 @@ int main() {
 
     cout << out[0] << " " << out[1] << endl;
 
+    uint64_t largest_value = 0xFFFFFFFFFFFFFFFF;
+    uint64_t scaled = 1;
+    uint64_t threshold = (long double)(largest_value)/(long double)(scaled);
+    cout << "threshold = " << threshold << endl;
+
+    scaled = 2;
+    threshold = (long double)(largest_value)/(long double)(scaled);
+    cout << "threshold = " << threshold << endl;
+
     return 0;
 }

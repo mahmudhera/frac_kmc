@@ -181,6 +181,9 @@ int main(int argc, char* argv[])
 			break;
 	}
 
+	cout << "Scaled " << scaled << endl;
+	cout << "Seed " << seed << endl;
+
 	if(argc - i < 2)
 	{
 		print_info();
