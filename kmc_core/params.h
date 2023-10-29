@@ -99,6 +99,10 @@ struct CKMCParams {
 	int n_sorters;			// number of sorters; default: 1
 	uint32 max_x;			//k+x-mers will be counted
 
+	// added my MRH
+	uint32_t scaled;
+	uint32_t seed;
+
 	KMC::EstimateHistogramCfg estimateHistogramCfg = KMC::EstimateHistogramCfg::DONT_ESTIMATE;
 	//params for strict memory mode
 	int sm_n_uncompactors;

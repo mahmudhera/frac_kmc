@@ -170,6 +170,10 @@ namespace KMC
 		ILogger* GetWarningsLogger() const noexcept { return warningsLogger; }
 		EstimateHistogramCfg GetEstimateHistogramCfg() const noexcept { return estimateHistogramCfg; }
 		IProgressObserver* GetProgressObserver() const noexcept { return progressObserver; }
+		
+		//added my MRH
+		uint32_t GetScaled() const noexcept { return scaled; }
+		uint32_t GetSeed() const noexcept { return seed; }
 #ifdef DEVELOP_MODE
 		bool GetDevelopVerbose() const noexcept { return developVerbose; }
 #endif

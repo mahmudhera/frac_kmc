@@ -130,6 +130,10 @@ template <unsigned SIZE> void CKMC<SIZE>::SetParamsStage1(const KMC::Stage1Param
 	Params.file_type = stage1Params.GetInputFileType();
 	Params.n_bins = stage1Params.GetNBins();
 
+	//added by MRH
+	Params.seed = stage1Params.GetSeed();
+	Params.scaled = stage1Params.GetScaled();
+
 	//TODO: for now if there is only histogram to estimate (no k-mer counting) KMC will work further and do nothing, maybe it shouldn't
 	//create empty tmp files and empty output database
 	//also if the option is to count and estimate the estimation may be used to calculate best_lut_prefix_len

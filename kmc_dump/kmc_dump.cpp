@@ -164,13 +164,6 @@ int main(int argc, char* argv[])
 
 	for(i = 1; i < argc; ++i)
 	{
-		if (strncmp(argv[i], "-scaled", 7) == 0) {
-			scaled = atoi(&argv[i][7]);
-		}
-		if(strncmp(argv[i], "-S", 2) == 0) {
-			seed = atoi(&argv[i][2]);
-		}
-
 		if(argv[i][0] == '-')
 		{
 			if(strncmp(argv[i], "-ci", 3) == 0)
@@ -188,8 +181,8 @@ int main(int argc, char* argv[])
 			break;
 	}
 
-	cout << "Scaled " << scaled << endl;
-	cout << "Seed " << seed << endl;
+	//cout << "Scaled " << scaled << endl;
+	//cout << "Seed " << seed << endl;
 
 	if(argc - i < 2)
 	{
@@ -249,7 +242,7 @@ int main(int argc, char* argv[])
 		// MRH code
 		uint64_t largest_value = 0xFFFFFFFFFFFFFFFF;
 		uint64_t threshold = (long double)(largest_value)/(long double)(scaled);
-		cout << "threshold = " << threshold << endl;
+		//cout << "threshold = " << threshold << endl;
 
 		while (kmer_data_base.ReadNextKmer(kmer_object, counter))
 		{
@@ -262,7 +255,7 @@ int main(int argc, char* argv[])
 			uint64_t out[2] = {0};
 			MurmurHash3_x64_128 ( str, sizeof(char)*_kmer_length, seed, out);
 			str[_kmer_length] = '\0';
-			std::cout << str << " hashed to " << out[0] << " " << (out[0]<threshold) << std::endl;
+			//std::cout << str << " hashed to " << out[0] << " " << (out[0]<threshold) << std::endl;
 			str[_kmer_length] = '\t';
 			if (out[0]<threshold)
 			{
