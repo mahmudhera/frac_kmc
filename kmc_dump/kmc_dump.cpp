@@ -167,7 +167,7 @@ int main(int argc, char* argv[])
 		if (strncmp(argv[i], "-scaled", 7) == 0) {
 			scaled = atoi(&argv[i][7]);
 		}
-		if(strncmp(argv[i], "-s", 2) == 0) {
+		if(strncmp(argv[i], "-S", 2) == 0) {
 			seed = atoi(&argv[i][2]);
 		}
 
@@ -177,7 +177,7 @@ int main(int argc, char* argv[])
 				min_count_to_set = atoi(&argv[i][3]);
 			else if(strncmp(argv[i], "-cx", 3) == 0)
 					max_count_to_set = atoi(&argv[i][3]);
-			else if(strncmp(argv[i], "-s", 2) == 0)
+			else if(strncmp(argv[i], "-S", 2) == 0)
 					seed = atoi(&argv[i][2]);
 			else if(strncmp(argv[i], "-scaled", 7) == 0)
 					scaled = atoi(&argv[i][7]);
@@ -288,7 +288,7 @@ void print_info(void)
 			  << "Options:\n"
 			  << "-ci<value> - exclude k-mers occurring less than <value> times\n"
 			  << "-cx<value> - exclude k-mers occurring more of than <value> times\n"
-			  << "-s<value>  - seed to be used by mmh3\n"
+			  << "-S<value>  - seed to be used by mmh3\n"
 			  << "-scaled<value>  - scaled for FracMinHash\n";
 }
 
