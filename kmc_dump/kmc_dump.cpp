@@ -237,6 +237,7 @@ int main(int argc, char* argv[])
 		// MRH code
 		uint64_t largest_value = 0xFFFFFFFFFFFFFFFF;
 		uint64_t threshold = (double)(largest_value)/(double)(scaled);
+		cout << "threshold = " << threshold << endl;
 
 		while (kmer_data_base.ReadNextKmer(kmer_object, counter))
 		{
@@ -249,7 +250,7 @@ int main(int argc, char* argv[])
 			uint64_t out[2] = {0};
 			MurmurHash3_x64_128 ( str, sizeof(char)*_kmer_length, seed, out);
 			str[_kmer_length] = '\0';
-			std::cout << str << " hashed to " << out[0] << std::endl;
+			std::cout << str << " hashed to " << out[0] << " " << (out[0]<threshold) << std::endl;
 			str[_kmer_length] = '\t';
 			if (out[0]<threshold)
 			{
