@@ -197,6 +197,22 @@ namespace KMC
 		this->kmerLen = kmerLen;
 		return *this;
 	}
+
+
+	// added by MRH
+	Stage1Params& Stage1Params::SetScaled(const uint32_t scaled)
+	{
+		this->scaled = scaled;
+		return *this;
+	}
+
+	// added by MRH
+	Stage1Params& Stage1Params::SetSeed(const uint32_t seed)
+	{
+		this->seed = seed;
+		return *this;
+	}
+
 	Stage1Params& Stage1Params::SetNThreads(uint32_t nThreads)
 	{
 		this->nThreads = nThreads;

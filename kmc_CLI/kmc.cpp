@@ -233,7 +233,13 @@ bool parse_parameters(int argc, char* argv[], Params& params)
 		if (strncmp(argv[i], "-smun", 5) == 0)		
 			stage2Params.SetStrictMemoryNUncompactors(atoi(&argv[i][5]));		
 		if (strncmp(argv[i], "-smme", 5) == 0)		
-			stage2Params.SetStrictMemoryNMergers(atoi(&argv[i][5]));		
+			stage2Params.SetStrictMemoryNMergers(atoi(&argv[i][5]));
+
+		if(strncmp(argv[i], "-S", 2) == 0)
+			stage1Params.SetSeed(atoi(&argv[i][2]));
+		if(strncmp(argv[i], "-scaled", 7) == 0)
+			stage1Params.SetScaled(atoi(&argv[i][7]));
+				
 	}
 
 	if (argc - i < 3)
