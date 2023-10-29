@@ -217,6 +217,8 @@ private:
 	//added by MRH
 	uint32_t scaled;
 	uint32_t seed;
+	uint64_t largest_value = 0xFFFFFFFFFFFFFFFF;
+	uint64_t threshold = largest_value;
 
 
 public:
@@ -310,6 +312,7 @@ template <unsigned SIZE> CKmerBinSorter<SIZE>::CKmerBinSorter(CKMCParams &Params
 	// added by MRH
 	scaled = Params.scaled;
 	seed = Params.seed;
+	threshold = (long double)(largest_value)/(long double)(scaled);
 }
 
 //----------------------------------------------------------------------------------
@@ -1135,7 +1138,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 			while (kxmer_set.get_min(counter_pos, next_kmer))
 			{
                 // MRH start
-				std::string str_rep = next_kmer.get_string_representation(kmer_len);
+				std::string str_rep = kmer.get_string_representation(kmer_len);
 				uint64_t hash_values[2] = {0};
 				MurmurHash3_x64_128 ( str_rep.c_str(), kmer_len, 0, hash_values );
 				std::cout << str_rep << " hashed to " << hash_values[0] << " at place2, where seed=" << seed << " and Scaled=" << scaled << endl;
