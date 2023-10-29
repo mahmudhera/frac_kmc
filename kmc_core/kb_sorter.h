@@ -1128,10 +1128,10 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 			count = kxmer_counters[counter_pos];
 			
 			// MRH start
-			std::string str_rep = kmer.get_string_representation(kmer_len);
-			uint64_t hash_values[2] = {0};
-			MurmurHash3_x64_128 ( str_rep.c_str(), kmer_len, 0, hash_values );
-			std::cout << str_rep << " hashed to " << hash_values[0] << " at place3, where seed=" << seed << " and Scaled=" << scaled << endl;
+			//std::string str_rep = kmer.get_string_representation(kmer_len);
+			//uint64_t hash_values[2] = {0};
+			//MurmurHash3_x64_128 ( str_rep.c_str(), kmer_len, 0, hash_values );
+			//std::cout << str_rep << " hashed to " << hash_values[0] << " at place3, where seed=" << seed << " and Scaled=" << scaled << endl;
             // MRH end
 
 			//rest
@@ -1153,6 +1153,9 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 						n_cutoff_min++;
 					else if (count >cutoff_max)
 						n_cutoff_max++;
+					else if (hash_values[0] > threshold) {
+						;
+					}
 					else
 					{
 						if (count > counter_max)
@@ -1192,7 +1195,10 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 			}
 
 			// MRH start
-			std::cout << next_kmer.get_string_representation(kmer_len) << " Place1, where seed=" << seed << " and Scaled=" << scaled << endl;
+			std::string str_rep = next_kmer.get_string_representation(kmer_len);
+			uint64_t hash_values[2] = {0};
+			MurmurHash3_x64_128 ( str_rep.c_str(), kmer_len, 0, hash_values );
+			std::cout << str_rep << " hased to " << hash_values[0] << " place1, where seed=" << seed << " and Scaled=" << scaled << endl;
 			// MRH end
 			//last one
 			++n_unique;
@@ -1201,6 +1207,9 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 				n_cutoff_min++;
 			else if (count >cutoff_max)
 				n_cutoff_max++;
+			else if (hash_values[0] > threshold) {
+				;
+			}
 			else
 			{
 
