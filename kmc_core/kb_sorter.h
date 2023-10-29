@@ -1149,13 +1149,10 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 				{
 					n_total += count;
 					++n_unique;
-					if (count < cutoff_min)
+					if (count < cutoff_min || hash_values[0] > threshold)
 						n_cutoff_min++;
 					else if (count >cutoff_max)
 						n_cutoff_max++;
-					else if (hash_values[0] > threshold) {
-						;
-					}
 					else
 					{
 						if (count > counter_max)
@@ -1203,13 +1200,10 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 			//last one
 			++n_unique;
 			n_total += count;
-			if (count < cutoff_min)
+			if (count < cutoff_min || hash_values[0] > threshold)
 				n_cutoff_min++;
 			else if (count >cutoff_max)
 				n_cutoff_max++;
-			else if (hash_values[0] > threshold) {
-				;
-			}
 			else
 			{
 
