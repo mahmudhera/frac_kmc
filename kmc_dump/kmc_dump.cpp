@@ -238,7 +238,7 @@ int main(int argc, char* argv[])
 
 		// MRH code
 		uint64_t largest_value = 0xFFFFFFFFFFFFFFFF;
-		uint64_t threshold = (double)(largest_value)/(double)(scaled);
+		uint64_t threshold = (long double)(largest_value)/(long double)(scaled);
 		cout << "threshold = " << threshold << endl;
 
 		while (kmer_data_base.ReadNextKmer(kmer_object, counter))
