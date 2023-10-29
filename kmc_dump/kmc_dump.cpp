@@ -274,8 +274,8 @@ void print_info(void)
 			  << "<kmc_database> - kmer_counter's output\n"
 			  << "Options:\n"
 			  << "-ci<value> - exclude k-mers occurring less than <value> times\n"
-			  << "-cx<value> - exclude k-mers occurring more of than <value> times\n";
-			  << "-s<value>  - seed to be used by mmh3\n";
+			  << "-cx<value> - exclude k-mers occurring more of than <value> times\n"
+			  << "-s<value>  - seed to be used by mmh3\n"
 			  << "-scaled<value>  - scaled for FracMinHash\n";
 }
 
