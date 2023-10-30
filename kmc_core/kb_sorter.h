@@ -1141,7 +1141,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 				std::string str_rep = kmer.get_string_representation(kmer_len);
 				uint64_t hash_values[2] = {0};
 				MurmurHash3_x64_128 ( str_rep.c_str(), kmer_len, seed, hash_values );
-				std::cout << str_rep << " hashed to " << hash_values[0] << " at place2, where seed=" << seed << " and Scaled=" << scaled << endl;
+				//std::cout << str_rep << " hashed to " << hash_values[0] << " at place2, where seed=" << seed << " and Scaled=" << scaled << endl;
                 // MRH end
 				if (kmer == next_kmer)
 					count += kxmer_counters[counter_pos];
@@ -1195,7 +1195,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 			std::string str_rep = next_kmer.get_string_representation(kmer_len);
 			uint64_t hash_values[2] = {0};
 			MurmurHash3_x64_128 ( str_rep.c_str(), kmer_len, seed, hash_values );
-			std::cout << str_rep << " hased to " << hash_values[0] << " place1, where seed=" << seed << " and Scaled=" << scaled << endl;
+			//std::cout << str_rep << " hased to " << hash_values[0] << " place1, where seed=" << seed << " and Scaled=" << scaled << endl;
 			// MRH end
 			//last one
 			++n_unique;
@@ -1301,6 +1301,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKmers()
 		act_kmer = &buffer[0];
 		count = 1;
 
+
 		n_total = n_rec;
 
 		for (i = 1; i < n_rec; ++i)
@@ -1309,7 +1310,12 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKmers()
 				count++;
 			else
 			{
-				if (count < cutoff_min)
+				// MRH start
+				std::string str_rep = act_kmer->get_string_representation(kmer_len);
+				uint64_t hash_values[2] = {0};
+				MurmurHash3_x64_128 ( str_rep.c_str(), kmer_len, seed, hash_values );
+				// MRH end
+				if (count < cutoff_min || hash_values[0] > threshold)
 				{
 					act_kmer = &buffer[i];
 					n_cutoff_min++;
@@ -1366,9 +1372,9 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKmers()
 		std::string str_rep = act_kmer->get_string_representation(kmer_len);
 		uint64_t hash_values[2] = {0};
 		MurmurHash3_x64_128 ( str_rep.c_str(), kmer_len, seed, hash_values );
-		std::cout << str_rep << " hashed to " << hash_values[0] << " at place4, where seed=" << seed << " and Scaled=" << scaled << endl;
+		//std::cout << str_rep << " hashed to " << hash_values[0] << " at place4, where seed=" << seed << " and Scaled=" << scaled << endl;
 		// MRH end
-		if (count < cutoff_min)
+		if (count < cutoff_min || hash_values[0] > threshold) 
 		{
 			n_cutoff_min++;
 		}
