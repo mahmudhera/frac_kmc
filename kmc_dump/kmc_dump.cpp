@@ -14,6 +14,8 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <cstdlib>
+#include <sstream>
 #include "../kmc_api/kmc_file.h"
 #include "nc_utils.h"
 
