@@ -38,9 +38,11 @@
 
 using namespace std;
 
+
 #define ROTL64(x,y)	rotl64(x,y)
 #define BIG_CONSTANT(x) (x)
 
+/*
 inline uint64_t getblock64 ( const uint64_t * p, int i )
 {
   return p[i];
@@ -137,7 +139,7 @@ void MurmurHash3_x64_128 ( const void * key, const int len,
   ((uint64_t*)out)[0] = h1;
   ((uint64_t*)out)[1] = h2;
 }
-
+*/
 
 template<unsigned SIZE> class CExpandThread;
 
