@@ -689,10 +689,10 @@ public:
 		this->seed = seed;
 		this->scaled = scaled;
 		threshold = (long double)(largest_value)/(long double)(scaled);
-		std::cout << "threshold: " << threshold << std::endl;
-		std::cout << "largest_value: " << largest_value << std::endl;
-		std::cout << "scaled: " << scaled << std::endl;
-		std::cout << "seed: " << seed << std::endl;
+		//std::cout << "threshold: " << threshold << std::endl;
+		//std::cout << "largest_value: " << largest_value << std::endl;
+		//std::cout << "scaled: " << scaled << std::endl;
+		//std::cout << "seed: " << seed << std::endl;
 	}
 
 	void operator()()
