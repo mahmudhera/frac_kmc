@@ -16,6 +16,9 @@
 #include <cstring>
 #include <cstdlib>
 #include <sstream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
 #include "../kmc_api/kmc_file.h"
 #include "nc_utils.h"
 
@@ -254,10 +257,10 @@ int main(int argc, char* argv[])
 		uint64_t threshold = (long double)(largest_value)/(long double)(scaled);
 		//cout << "threshold = " << threshold << endl;
 
-		string output_string = "[{\"class\":\"frac_kmc_signature\",\"email\":\"\",\"hash_function\":\"0.murmur64\",";
+		string output_string = "[{\"class\":\"frac_kmc_signature\",\"email\":\"\",\"hash_function\":\"0.murmur64\"";
 		strcpy(str, output_string.c_str());
 		fwrite(str, 1, output_string.length(), out_file);
-		output_string = ",\"filename\":" + filename;
+		output_string = ",\"filename\":\"" + filename + "\"";
 		strcpy(str, output_string.c_str());
 		fwrite(str, 1, output_string.length(), out_file);
 		output_string = ",\"license\":\"CC0\"";
@@ -268,7 +271,7 @@ int main(int argc, char* argv[])
 		ss1 << ksize;
 		output_string = output_string + ",\"ksize\":" + string(ss1.str());
 		std::ostringstream ss2;
-		ss2 << scaled;
+		ss2 << seed;
 		output_string = output_string + ",\"seed\":" + string(ss2.str());
 		std::ostringstream ss;
     	ss << largest_value;
@@ -276,15 +279,8 @@ int main(int argc, char* argv[])
 		output_string = output_string + ",\"mins\":[";
 		strcpy(str, output_string.c_str());
 		fwrite(str, 1, output_string.length(), out_file);
-		
-		output_string = "TESTETSTETETTSTTEST";
-		strcpy(str, output_string.c_str());
-		fwrite(str, 1, output_string.length(), out_file);
 
-		output_string = "], \"molecule\":\"dna\"}], \"version\":0.1}\n";
-		strcpy(str, output_string.c_str());
-		fwrite(str, 1, output_string.length(), out_file);
-
+		vector<uint64_t> hashes;
 
 		while (kmer_data_base.ReadNextKmer(kmer_object, counter))
 		{
@@ -301,9 +297,30 @@ int main(int argc, char* argv[])
 			str[_kmer_length] = '\t';
 			if (out[0]<threshold)
 			{
-				fwrite(str, 1, _kmer_length + counter_len + 2, out_file);
+				//fwrite(str, 1, _kmer_length + counter_len + 2, out_file);
+				hashes.push_back(out[0]);
 			}
 		}
+
+		std::sort(hashes.begin(), hashes.end());
+		for (int i=0; i<hashes.size(); i++)
+		{
+			std::ostringstream ss;
+			ss << hashes[i];
+			output_string = string(ss.str());
+			strcpy(str, output_string.c_str());
+			fwrite(str, 1, output_string.length(), out_file);
+			if (i<hashes.size()-1)
+			{
+				output_string = ",";
+				strcpy(str, output_string.c_str());
+				fwrite(str, 1, output_string.length(), out_file);
+			}
+		}
+
+		output_string = "], \"molecule\":\"dna\"}], \"version\":0.1}\n";
+		strcpy(str, output_string.c_str());
+		fwrite(str, 1, output_string.length(), out_file);
 
 		fclose(out_file);
 		kmer_data_base.Close();
