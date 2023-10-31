@@ -299,7 +299,7 @@ int main(int argc, char* argv[])
 		std::sort(hashes.begin(), hashes.end());
 
 		std::ostringstream ss;
-    	ss << hashes[hashes.size()-1]];
+    	ss << hashes[hashes.size()-1];
 		output_string = output_string + ",\"max_hash\":" + string(ss.str());
 		output_string = output_string + ",\"mins\":[";
 		strcpy(str, output_string.c_str());
