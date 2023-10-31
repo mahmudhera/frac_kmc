@@ -315,6 +315,9 @@ template <unsigned SIZE> CKmerBinSorter<SIZE>::CKmerBinSorter(CKMCParams &Params
 	scaled = Params.scaled;
 	seed = Params.seed;
 	threshold = (long double)(largest_value)/(long double)(scaled);
+	cout << "threshold = " << threshold << endl;
+	cout << "scaled = " << scaled << endl;
+	cout << "seed = " << seed << endl;
 }
 
 //----------------------------------------------------------------------------------
