@@ -273,12 +273,6 @@ int main(int argc, char* argv[])
 		std::ostringstream ss2;
 		ss2 << seed;
 		output_string = output_string + ",\"seed\":" + string(ss2.str());
-		std::ostringstream ss;
-    	ss << largest_value;
-		output_string = output_string + ",\"max_hash\":" + string(ss.str());
-		output_string = output_string + ",\"mins\":[";
-		strcpy(str, output_string.c_str());
-		fwrite(str, 1, output_string.length(), out_file);
 
 		vector<uint64_t> hashes;
 
@@ -303,6 +297,14 @@ int main(int argc, char* argv[])
 		}
 
 		std::sort(hashes.begin(), hashes.end());
+
+		std::ostringstream ss;
+    	ss << hashes[hashes.size()-1])];
+		output_string = output_string + ",\"max_hash\":" + string(ss.str());
+		output_string = output_string + ",\"mins\":[";
+		strcpy(str, output_string.c_str());
+		fwrite(str, 1, output_string.length(), out_file);
+
 		for (int i=0; i<hashes.size(); i++)
 		{
 			std::ostringstream ss;
