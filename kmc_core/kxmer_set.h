@@ -24,6 +24,7 @@ using namespace std;
 #define ROTL64(x,y)	rotl64(x,y)
 #define BIG_CONSTANT(x) (x)
 
+
 inline uint64_t getblock64 ( const uint64_t * p, int i )
 {
   return p[i];
@@ -688,6 +689,7 @@ public:
 		scaled(scaled)
 	{
 		threshold = (long double)(largest_value)/(long double)(scaled);
+		std::cout << "threshold: " << threshold << std::endl;
 	}
 
 	void operator()()
