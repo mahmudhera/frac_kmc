@@ -126,6 +126,11 @@ namespace KMC
 		ILogger* warningsLogger = &defaults.defaultWarningsLogger;
 		EstimateHistogramCfg estimateHistogramCfg = EstimateHistogramCfg::DONT_ESTIMATE;
 		IProgressObserver* progressObserver = &defaults.defaultProgressObserver;
+
+		// added by MRH
+		uint32_t scaled = 1;
+		uint32_t seed = 0;
+
 #ifdef DEVELOP_MODE
 		bool developVerbose = false;
 #endif
@@ -148,6 +153,11 @@ namespace KMC
 		Stage1Params& SetWarningsLogger(ILogger* warningsLogger);
 		Stage1Params& SetEstimateHistogramCfg(EstimateHistogramCfg estimateHistogramCfg);
 		Stage1Params& SetProgressObserver(IProgressObserver* progressObserver);
+
+		// added by MRH
+		Stage1Params& SetScaled(const uint32_t scaled);
+		Stage1Params& SetSeed(const uint32_t seed);
+
 #ifdef DEVELOP_MODE
 		Stage1Params& SetDevelopVerbose(bool developVerbose);
 #endif
@@ -170,6 +180,10 @@ namespace KMC
 		ILogger* GetWarningsLogger() const noexcept { return warningsLogger; }
 		EstimateHistogramCfg GetEstimateHistogramCfg() const noexcept { return estimateHistogramCfg; }
 		IProgressObserver* GetProgressObserver() const noexcept { return progressObserver; }
+		
+		//added my MRH
+		uint32_t GetScaled() const noexcept { return scaled; }
+		uint32_t GetSeed() const noexcept { return seed; }
 #ifdef DEVELOP_MODE
 		bool GetDevelopVerbose() const noexcept { return developVerbose; }
 #endif
