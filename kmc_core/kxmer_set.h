@@ -684,10 +684,10 @@ public:
 		lut_prefix_len(lut_prefix_len), 
 		out_buffer(out_buffer),
 		without_output(without_output),
-		output_type(output_type),
-		seed(seed),
-		scaled(scaled)
+		output_type(output_type)
 	{
+		this->seed = seed;
+		this->scaled = scaled;
 		threshold = (long double)(largest_value)/(long double)(scaled);
 		std::cout << "threshold: " << threshold << std::endl;
 		std::cout << "largest_value: " << largest_value << std::endl;
@@ -736,7 +736,6 @@ class CKXmerSetMultiThreaded
 	uint32_t seed = 0;
 	uint32_t scaled = 1;
 
-
 	list<pair<uint64, uint64>> output_packs_desc;
 
 public:
@@ -764,10 +763,10 @@ public:
 		lut_prefix_len(lut_prefix_len), 
 		lut(lut), 
 		out_buffer(out_buffer),		
-		n_threads(n_threads),
-		seed(seed),
-		scaled(scaled)
+		n_threads(n_threads)
 	{		
+		this->seed = seed;
+		this->scaled = scaled;
 	}
 	void InitAdd(uint64 start, uint64 end, uint32 shr)
 	{
