@@ -318,6 +318,8 @@ template <unsigned SIZE> CKmerBinSorter<SIZE>::CKmerBinSorter(CKMCParams &Params
 	cout << "threshold = " << threshold << endl;
 	cout << "scaled = " << scaled << endl;
 	cout << "seed = " << seed << endl;
+	cout << "Param.seed = " << Params.seed << endl;
+	cout << "Param.scaled = " << Params.scaled << endl;
 }
 
 //----------------------------------------------------------------------------------
