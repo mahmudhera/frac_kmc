@@ -113,6 +113,10 @@ bool parse_parameters(int argc, char* argv[], Params& params)
 		if (argv[i][0] != '-')
 			break;
 		// Number of threads
+		if(strncmp(argv[i], "-S", 2) == 0)
+			stage1Params.SetSeed(atoi(&argv[i][2]));
+		if(strncmp(argv[i], "-scaled", 7) == 0)
+			stage1Params.SetScaled(atoi(&argv[i][7]));
 		if (strncmp(argv[i], "-t", 2) == 0)
 		{
 			auto nThreads = atoi(&argv[i][2]);
@@ -234,11 +238,6 @@ bool parse_parameters(int argc, char* argv[], Params& params)
 			stage2Params.SetStrictMemoryNUncompactors(atoi(&argv[i][5]));		
 		if (strncmp(argv[i], "-smme", 5) == 0)		
 			stage2Params.SetStrictMemoryNMergers(atoi(&argv[i][5]));
-
-		if(strncmp(argv[i], "-S", 2) == 0)
-			stage1Params.SetSeed(atoi(&argv[i][2]));
-		if(strncmp(argv[i], "-scaled", 7) == 0)
-			stage1Params.SetScaled(atoi(&argv[i][7]));
 				
 	}
 
