@@ -391,8 +391,8 @@ void print_summary(
 	const KMC::Stage1Params& stage1Params = params.stage1Params;
 	const KMC::Stage2Params& stage2Params = params.stage2Params;
 
-	cout << "1st stage: " << stage1Results.time << "s\n"
-		<< "2nd stage: " << stage2Results.time << "s\n";
+	cout << "KMC 1st stage: " << stage1Results.time << "s\n"
+		<< "KMC 2nd stage: " << stage2Results.time << "s\n";
 
 	bool display_strict_mem_stats = stage2Params.GetStrictMemoryMode() && !stage1Results.wasSmallKOptUsed;
 	if (display_strict_mem_stats)
@@ -411,16 +411,15 @@ void print_summary(
 	else
 		cout << "Tmp size : " << stage1Results.tmpSize / 1000000 << "MB\n";
 	cout << "\nStats:\n"
-		<< "   No. of k-mers below min. threshold : " << setw(12) << stage2Results.nBelowCutoffMin << "\n"
-		<< "   No. of k-mers above max. threshold : " << setw(12) << stage2Results.nAboveCutoffMax << "\n"
+		<< "   No. of k-mers above FMH. threshold : " << setw(12) << stage2Results.nBelowCutoffMin << "\n"
 		<< "   No. of unique k-mers               : " << setw(12) << stage2Results.nUniqueKmers << "\n"
-		<< "   No. of unique counted k-mers       : " << setw(12) << stage2Results.nUniqueKmers - stage2Results.nBelowCutoffMin - stage2Results.nAboveCutoffMax << "\n"
+		<< "   No. of k-mers in FMH. sketch       : " << setw(12) << stage2Results.nUniqueKmers - stage2Results.nBelowCutoffMin - stage2Results.nAboveCutoffMax << "\n"
 		<< "   Total no. of k-mers                : " << setw(12) << stage2Results.nTotalKmers << "\n";
-	if (stage1Params.GetInputFileType() != KMC::InputFileType::MULTILINE_FASTA)
-		cout << "   Total no. of reads                 : " << setw(12) << stage1Results.nSeqences << "\n";
-	else
-		cout << "   Total no. of sequences             : " << setw(12) << stage1Results.nSeqences << "\n";
-	cout << "   Total no. of super-k-mers          : " << setw(12) << stage1Results.nTotalSuperKmers << "\n";
+	//if (stage1Params.GetInputFileType() != KMC::InputFileType::MULTILINE_FASTA)
+	//	cout << "   Total no. of reads                 : " << setw(12) << stage1Results.nSeqences << "\n";
+	//else
+	//	cout << "   Total no. of sequences             : " << setw(12) << stage1Results.nSeqences << "\n";
+	//cout << "   Total no. of super-k-mers          : " << setw(12) << stage1Results.nTotalSuperKmers << "\n";
 }
 
 //----------------------------------------------------------------------------------

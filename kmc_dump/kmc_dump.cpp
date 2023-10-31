@@ -12,6 +12,8 @@
 */
 
 #include <iostream>
+#include <string>
+#include <cstring>
 #include "../kmc_api/kmc_file.h"
 #include "nc_utils.h"
 
@@ -151,6 +153,8 @@ int main(int argc, char* argv[])
 	std::string output_file_name;
 	uint32 seed = 0;
 	uint32 scaled = 1;
+	uint32 ksize = 0;
+	string filename = "";	
 
 	FILE * out_file;
 	//------------------------------------------------------------
@@ -174,6 +178,10 @@ int main(int argc, char* argv[])
 					seed = atoi(&argv[i][2]);
 			else if(strncmp(argv[i], "-scaled", 7) == 0)
 					scaled = atoi(&argv[i][7]);
+			else if(strncmp(argv[i], "-ksize", 6) == 0)
+					ksize = atoi(&argv[i][6]);
+			else if(strncmp(argv[i], "-filename", 9) == 0)
+					filename = string(&argv[i][9]);
 			else
 				break;
 		}
@@ -243,6 +251,32 @@ int main(int argc, char* argv[])
 		uint64_t largest_value = 0xFFFFFFFFFFFFFFFF;
 		uint64_t threshold = (long double)(largest_value)/(long double)(scaled);
 		//cout << "threshold = " << threshold << endl;
+
+		string output_string = "[{\"class\":\"frac_kmc_signature\",\"email\":\"\",\"hash_function\":\"0.murmur64\",";
+		strcpy(str, output_string.c_str());
+		fwrite(str, 1, output_string.length(), out_file);
+		output_string = ",\"filename\":" + filename;
+		strcpy(str, output_string.c_str());
+		fwrite(str, 1, output_string.length(), out_file);
+		output_string = ",\"license\":\"CC0\"";
+		strcpy(str, output_string.c_str());
+		fwrite(str, 1, output_string.length(), out_file);
+		output_string = ",\"signatures\":[{\"num\":0";
+		output_string = output_string + ",\"ksize\":" + string(ksize);
+		output_string = output_string + ",\"seed\":" + string(seed);
+		output_string = output_string + ",\"max_hash\":" + string(largest_value);
+		output_string = output_string + ",\"mins\":[";
+		strcpy(str, output_string.c_str());
+		fwrite(str, 1, output_string.length(), out_file);
+		
+		output_string = "TESTETSTETETTSTTEST";
+		strcpy(str, output_string.c_str());
+		fwrite(str, 1, output_string.length(), out_file);
+
+		output_string = "], \"molecule\":\"dna\"}], \"version\":0.1}\n";
+		strcpy(str, output_string.c_str());
+		fwrite(str, 1, output_string.length(), out_file);
+
 
 		while (kmer_data_base.ReadNextKmer(kmer_object, counter))
 		{
