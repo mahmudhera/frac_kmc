@@ -264,7 +264,9 @@ int main(int argc, char* argv[])
 		output_string = ",\"signatures\":[{\"num\":0";
 		output_string = output_string + ",\"ksize\":" + string(ksize);
 		output_string = output_string + ",\"seed\":" + string(seed);
-		output_string = output_string + ",\"max_hash\":" + string(largest_value);
+		std::ostringstream ss;
+    	ss << largest_value;
+		output_string = output_string + ",\"max_hash\":" + string(ss.str());
 		output_string = output_string + ",\"mins\":[";
 		strcpy(str, output_string.c_str());
 		fwrite(str, 1, output_string.length(), out_file);
