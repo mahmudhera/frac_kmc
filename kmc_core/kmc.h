@@ -133,9 +133,9 @@ template <unsigned SIZE> void CKMC<SIZE>::SetParamsStage1(const KMC::Stage1Param
 	//added by MRH
 	Params.seed = stage1Params.GetSeed();
 	Params.scaled = stage1Params.GetScaled();
-	std::cout << "seed: " << Params.seed << std::endl;
-	std::cout << "scaled: " << Params.scaled << std::endl;
-	
+	//std::cout << "seed: " << Params.seed << std::endl;
+	//std::cout << "scaled: " << Params.scaled << std::endl;
+
 
 	//TODO: for now if there is only histogram to estimate (no k-mer counting) KMC will work further and do nothing, maybe it shouldn't
 	//create empty tmp files and empty output database

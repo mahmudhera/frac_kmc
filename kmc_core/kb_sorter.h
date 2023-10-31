@@ -1104,7 +1104,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 
 		if (n_sorting_threads > 1)
 		{
-			cout << "seed=" << seed << " and scaled=" << scaled << endl;
+			//cout << "seed=" << seed << " and scaled=" << scaled << endl;
 			CKXmerSetMultiThreaded<SIZE> kxmer_set_multithreaded(buffer, kxmer_counters, compacted_count,
 				cutoff_min, cutoff_max, counter_max, kmer_len, lut_prefix_len, lut, out_buffer, n_sorting_threads, seed, scaled);
 
