@@ -541,7 +541,7 @@ public:
 
 					n_total += count;
 					++n_unique;
-					if (count < cutoff_min || hash_values[0] > threshold)
+					if (count < cutoff_min || hash_values[0] >= threshold)
 						n_cutoff_min++;
 					else if (count > cutoff_max)
 						n_cutoff_max++;
@@ -597,7 +597,7 @@ public:
 			MurmurHash3_x64_128 ( str_rep.c_str(), kmer_len, seed, hash_values );
 			//MRH end
 
-			if (count < cutoff_min || hash_values[0] > threshold)
+			if (count < cutoff_min || hash_values[0] >= threshold)
 				n_cutoff_min++;
 			else if (count > cutoff_max)
 				n_cutoff_max++;
