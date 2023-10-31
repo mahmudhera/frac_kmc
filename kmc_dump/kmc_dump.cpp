@@ -264,8 +264,12 @@ int main(int argc, char* argv[])
 		strcpy(str, output_string.c_str());
 		fwrite(str, 1, output_string.length(), out_file);
 		output_string = ",\"signatures\":[{\"num\":0";
-		output_string = output_string + ",\"ksize\":" + string(ksize);
-		output_string = output_string + ",\"seed\":" + string(seed);
+		std::ostringstream ss1;
+		ss1 << ksize;
+		output_string = output_string + ",\"ksize\":" + string(ss1.str());
+		std::ostringstream ss2;
+		ss2 << scaled;
+		output_string = output_string + ",\"seed\":" + string(ss2.str());
 		std::ostringstream ss;
     	ss << largest_value;
 		output_string = output_string + ",\"max_hash\":" + string(ss.str());
