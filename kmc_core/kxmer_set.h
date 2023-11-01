@@ -1,9 +1,9 @@
 /*
   This file is a part of KMC software distributed under GNU GPL 3 licence.
   The homepage of the KMC project is http://sun.aei.polsl.pl/kmc
-  
+
   Authors: Sebastian Deorowicz, Agnieszka Debudaj-Grabysz, Marek Kokot
-  
+
   Version: 3.2.2
   Date   : 2023-03-10
 */
@@ -12,11 +12,12 @@
 #include "defs.h"
 #include <tuple>
 #include <queue>
+#include <cmath>
 #include "exception_aware_thread.h"
 
 using namespace std;
 
-#define KXMER_SET_SIZE 1024 
+#define KXMER_SET_SIZE 1024
 
 #define MAX_FOR_X_3 112
 
@@ -177,8 +178,8 @@ template<unsigned SIZE, unsigned PARENT>
 struct ParentFinder<SIZE, PARENT, Range<(PARENT > 56)> >
 {
 	FORCE_INLINE static uint32 Execute(CKXmerSet<SIZE>& /*ptr*/, const CKmer<SIZE>& /*kmer*/)
-	{		
-		return PARENT;		
+	{
+		return PARENT;
 	}
 };
 
@@ -188,8 +189,8 @@ class CKXmerSet
 	typedef tuple<uint64, uint64, uint32> elem_desc_t; //start_pos, end_pos, shr
 	typedef pair<CKmer<SIZE>, uint32> heap_elem_t; //kxmer val, desc_id
 	elem_desc_t data_desc[KXMER_SET_SIZE];
-	
-public: 
+
+public:
 	heap_elem_t data[KXMER_SET_SIZE];
 private:
 	uint32 pos;
@@ -209,7 +210,7 @@ private:
 		{
 			kmer.set(data[--pos].first);
 			desc_id = data[pos].second;
-			data[pos].first.fill_T();		
+			data[pos].first.fill_T();
 		}
 
 		uint32 parent = ParentFinder<SIZE, 1>::Execute(*this, kmer);
@@ -222,11 +223,11 @@ public:
 	{
 		pos = 1;
 		mask.set_n_1(kmer_len * 2);
-		desc_pos = 0;		
-	}	
+		desc_pos = 0;
+	}
 
 	inline void init_add(uint64 start_pos, uint64 end_pos, uint32 shr)
-	{		
+	{
 		data_desc[desc_pos] = make_tuple(start_pos, end_pos, shr);
 		data[pos].first.from_kxmer(buffer[start_pos], shr, mask);
 		data[pos].second = desc_pos;
@@ -256,12 +257,12 @@ public:
 
 	inline bool get_min(uint64& _pos, CKmer<SIZE>& kmer)
 	{
-		if (pos <= 1)		
-			return false;				
+		if (pos <= 1)
+			return false;
 		kmer = data[1].first;
 		_pos = get<0>(data_desc[data[1].second]);
 		update_heap();
-		
+
 		return true;
 	}
 };
@@ -284,7 +285,7 @@ class CSubArrayDescGenerator
 	const vector<SubArrayDesc>& sub_array_descs;
 	queue<vector<SubArrayDesc>> data;
 	CKmer<SIZE>* buffer;
-	mutable std::mutex mtx;	
+	mutable std::mutex mtx;
 	uint64 out_start = 0;
 	uint32 cutoff_min;
 	uint32 rec_len;
@@ -292,7 +293,7 @@ class CSubArrayDescGenerator
 	uint32* kxmer_counters;
 	uint64 n_kxmer_counters;
 	uint32 n_threads;
-public:	
+public:
 	CSubArrayDescGenerator(uint32 kmer_len, uint32 n_parts, const vector<SubArrayDesc>& sub_array_descs, CKmer<SIZE>* buffer, uint32 cutoff_min, uint32 rec_len, uint32* kxmer_counters, uint64 n_kxmer_counters, uint32 n_threads) :
 		kmer_len(kmer_len),
 		n_parts(n_parts),
@@ -300,11 +301,11 @@ public:
 		sub_array_descs(sub_array_descs),
 		buffer(buffer),
 		cutoff_min(cutoff_min),
-		rec_len(rec_len),		
+		rec_len(rec_len),
 		kxmer_counters(kxmer_counters),
 		n_kxmer_counters(n_kxmer_counters),
 		n_threads(n_threads)
-	{		
+	{
 		//calculate cumulative sum
 		cumsum.resize(n_kxmer_counters / COMPACT_CUMSUM_PART_SIZE + 1);
 		vector<thread> threads;
@@ -351,7 +352,7 @@ public:
 		vector<SubArrayDesc> sub_array_desc_copy(sub_array_descs.begin(), sub_array_descs.end());
 
 		CKmer<SIZE> mask;
-		mask.set_n_1(kmer_len * 2);		
+		mask.set_n_1(kmer_len * 2);
 		while (parts_left > 1)
 		{
 			uint64 end_in_biggest = (sub_array_desc_copy[biggest_id].end - sub_array_desc_copy[biggest_id].start - start_in_biggest) / parts_left + sub_array_desc_copy[biggest_id].start;
@@ -372,18 +373,18 @@ public:
 				e.start = new_end;
 			}
 
-			//count exact number of k-mers in each subarray of part						
+			//count exact number of k-mers in each subarray of part
 			for (auto& elem : current)
-				elem.counters_sum = GetCumSum(elem.end) - GetCumSum(elem.start);			
+				elem.counters_sum = GetCumSum(elem.end) - GetCumSum(elem.start);
 			data.push(move(current));
 			--parts_left;
 		}
 
 		//last
 		for (auto& elem : sub_array_desc_copy)
-			elem.counters_sum = GetCumSum(elem.end) - GetCumSum(elem.start);		
-		data.push(move(sub_array_desc_copy));		
-	}	
+			elem.counters_sum = GetCumSum(elem.end) - GetCumSum(elem.start);
+		data.push(move(sub_array_desc_copy));
+	}
 
 
 	uint64 GetCumSum(uint64 pos)
@@ -405,14 +406,14 @@ public:
 		if (data.empty())
 			return false;
 		desc = move(data.front());
-		data.pop();		
+		data.pop();
 		_out_start = out_start;
-		
+
 		uint64 n_recs = 0;
 		for (auto& e : desc)
 			n_recs += e.counters_sum;
 		out_start += ((n_recs) / MAX(cutoff_min, 1u)) * rec_len;
-			
+
 		return true;
 	}
 };
@@ -448,16 +449,16 @@ class CKXmerMerger
 	uint32 cutoff_min;
 	uint32 cutoff_max;
 	uint32 counter_max;
-	uint32 kmer_len;	
+	uint32 kmer_len;
 	CKXmerSet<SIZE> kxmer_set;
 	uint64* lut;
 	uint32 counter_size;
-	int32 lut_prefix_len;	
+	int32 lut_prefix_len;
 	uchar* out_buffer;
 	bool without_output;
 	OutputType output_type;
 
-	// MRH 
+	// MRH
 	uint32 scaled;
 	uint32 seed;
 	uint64_t largest_value = 0xFFFFFFFFFFFFFFFF;
@@ -481,7 +482,7 @@ public:
 
 		CKmer<SIZE> mask;
 		mask.set_n_1(kmer_len * 2);
-		
+
 		uint64 last_prefix = 0;
 		uint64 last_prefix_n_recs = 0;
 		uint64 first_prefix = 1ull << 2 * lut_prefix_len;
@@ -497,10 +498,10 @@ public:
 		{
 			if (d.end > d.start)
 			{
-				kxmer_set.init_add(d.start, d.end, d.shr);				
+				kxmer_set.init_add(d.start, d.end, d.shr);
 				candidate_min.from_kxmer(buffer[d.start], d.shr, mask);
 				candidate_max.from_kxmer(buffer[d.end - 1], d.shr, mask);
-				
+
 				uint64 candidate_min_prefix = candidate_min.remove_suffix(suffix_len_bits);
 				uint64 candidate_max_prefix = candidate_max.remove_suffix(suffix_len_bits);
 
@@ -515,20 +516,20 @@ public:
 
 		CKmer<SIZE> kmer, next_kmer;
 		kmer.clear();
-		next_kmer.clear();	
+		next_kmer.clear();
 		uint32 count;
 
 
-		uint64 out_pos = out_start; 
+		uint64 out_pos = out_start;
 
 		//first
 		if (kxmer_set.get_min(counter_pos, kmer))
-		{			
+		{
 			count = kxmer_counters[counter_pos];
 
 			//rest
 			while (kxmer_set.get_min(counter_pos, next_kmer))
-			{				
+			{
 				if (kmer == next_kmer)
 					count += kxmer_counters[counter_pos];
 				else
@@ -546,7 +547,7 @@ public:
 					else if (count > cutoff_max)
 						n_cutoff_max++;
 					else
-					{						
+					{
 						if (count > counter_max)
 							count = counter_max;
 
@@ -651,44 +652,44 @@ public:
 		}
 	}
 
-	CKXmerMerger(const vector<SubArrayDesc>& sub_array_descs, 
-		CSubArrayDescGenerator<SIZE>& sub_array_desc_generator, 
-		CLutUpdater& lut_updater, 
+	CKXmerMerger(const vector<SubArrayDesc>& sub_array_descs,
+		CSubArrayDescGenerator<SIZE>& sub_array_desc_generator,
+		CLutUpdater& lut_updater,
 		CKmer<SIZE>* buffer,
-		uint32* kxmer_counters, 
-		uint32 cutoff_min, 
-		uint32 cutoff_max, 
-		uint32 counter_max, 
-		uint32 kmer_len, 
-		uint64* lut, 
-		uint32 counter_size, 
-		int32 lut_prefix_len, 
+		uint32* kxmer_counters,
+		uint32 cutoff_min,
+		uint32 cutoff_max,
+		uint32 counter_max,
+		uint32 kmer_len,
+		uint64* lut,
+		uint32 counter_size,
+		int32 lut_prefix_len,
 		uchar* out_buffer,
 		bool without_output,
 		OutputType output_type,
 		uint32 seed,
 		uint32 scaled)
 			:
-		sub_array_descs(sub_array_descs), 
-		sub_array_desc_generator(sub_array_desc_generator), 
+		sub_array_descs(sub_array_descs),
+		sub_array_desc_generator(sub_array_desc_generator),
 		lut_updater(lut_updater),
-		buffer(buffer), 
-		kxmer_counters(kxmer_counters), 
+		buffer(buffer),
+		kxmer_counters(kxmer_counters),
 		cutoff_min(cutoff_min),
 		cutoff_max(cutoff_max),
-		counter_max(counter_max), 
-		kmer_len(kmer_len), 
-		kxmer_set(kmer_len), 
+		counter_max(counter_max),
+		kmer_len(kmer_len),
+		kxmer_set(kmer_len),
 		lut(lut),
-		counter_size(counter_size), 
-		lut_prefix_len(lut_prefix_len), 
+		counter_size(counter_size),
+		lut_prefix_len(lut_prefix_len),
 		out_buffer(out_buffer),
 		without_output(without_output),
 		output_type(output_type)
 	{
 		this->seed = seed;
 		this->scaled = scaled;
-		threshold = (long double)(largest_value)/(long double)(scaled);
+		threshold = std::round((long double)(largest_value)/(long double)(scaled));
 		//std::cout << "threshold: " << threshold << std::endl;
 		//std::cout << "largest_value: " << largest_value << std::endl;
 		//std::cout << "scaled: " << scaled << std::endl;
@@ -697,11 +698,11 @@ public:
 
 	void operator()()
 	{
-		vector<SubArrayDesc> desc;		
-		uint64 out_start;		
+		vector<SubArrayDesc> desc;
+		uint64 out_start;
 		while (sub_array_desc_generator.GetNext(desc, out_start))
 		{
-			Process(desc, out_start);	
+			Process(desc, out_start);
 		}
 	}
 
@@ -713,7 +714,7 @@ public:
 
 template<unsigned SIZE>
 class CKXmerSetMultiThreaded
-{	
+{
 	vector<SubArrayDesc> sub_array_descs;
 	CKmer<SIZE>* buffer;
 	uint32* kxmer_counters;
@@ -721,13 +722,13 @@ class CKXmerSetMultiThreaded
 	uint32 cutoff_min;
 	uint32 cutoff_max;
 	uint32 counter_max;
-	uint32 kmer_len;	
+	uint32 kmer_len;
 	int32 lut_prefix_len;
 	uint64* lut;
-	uchar* out_buffer;	
-	uint32 n_threads = 0;	
+	uchar* out_buffer;
+	uint32 n_threads = 0;
 
-	uint64 n_unique = 0; 
+	uint64 n_unique = 0;
 	uint64 n_cutoff_min = 0;
 	uint64 n_cutoff_max = 0;
 	uint64 n_total = 0;
@@ -740,31 +741,31 @@ class CKXmerSetMultiThreaded
 
 public:
 	CKXmerSetMultiThreaded(CKmer<SIZE>* buffer,
-		uint32* kxmer_counters, 
+		uint32* kxmer_counters,
 		uint64 n_kxmer_counters,
-		uint32 cutoff_min, 
-		uint32 cutoff_max, 
-		uint32 counter_max, 
-		uint32 kmer_len, 
-		int32 lut_prefix_len, 
-		uint64* lut, 
-		uchar* out_buffer, 		
+		uint32 cutoff_min,
+		uint32 cutoff_max,
+		uint32 counter_max,
+		uint32 kmer_len,
+		int32 lut_prefix_len,
+		uint64* lut,
+		uchar* out_buffer,
 		uint32 n_threads,
 		uint32 seed,
 		uint32 scaled)
 			:
-		buffer(buffer), 
-		kxmer_counters(kxmer_counters), 
+		buffer(buffer),
+		kxmer_counters(kxmer_counters),
 		n_kxmer_counters(n_kxmer_counters),
-		cutoff_min(cutoff_min), 
-		cutoff_max(cutoff_max), 
-		counter_max(counter_max),		
+		cutoff_min(cutoff_min),
+		cutoff_max(cutoff_max),
+		counter_max(counter_max),
 		kmer_len(kmer_len),
-		lut_prefix_len(lut_prefix_len), 
-		lut(lut), 
-		out_buffer(out_buffer),		
+		lut_prefix_len(lut_prefix_len),
+		lut(lut),
+		out_buffer(out_buffer),
 		n_threads(n_threads)
-	{		
+	{
 		this->seed = seed;
 		this->scaled = scaled;
 	}
@@ -776,7 +777,7 @@ public:
 	void Process(bool without_output, OutputType output_type)
 	{
 		uint32 n_parts = 8 * n_threads;
-		
+
 		CLutUpdater lut_updater(lut);
 		vector<CExceptionAwareThread> threads;
 		vector<std::unique_ptr<CKXmerMerger<SIZE>>> mergers;
@@ -787,7 +788,7 @@ public:
 		CSubArrayDescGenerator<SIZE> sub_array_desc_generator(kmer_len, n_parts, sub_array_descs, buffer, cutoff_min, rec_len, kxmer_counters, n_kxmer_counters, n_threads);
 		for (uint32 i = 0; i < n_threads; ++i)
 		{
-			mergers.push_back(std::make_unique<CKXmerMerger<SIZE>>(sub_array_descs, sub_array_desc_generator, lut_updater, buffer, kxmer_counters, cutoff_min, 
+			mergers.push_back(std::make_unique<CKXmerMerger<SIZE>>(sub_array_descs, sub_array_desc_generator, lut_updater, buffer, kxmer_counters, cutoff_min,
 				cutoff_max, counter_max, kmer_len, lut, counter_size, lut_prefix_len, out_buffer, without_output, output_type, seed, scaled));
 			threads.emplace_back(ref(*mergers.back()));
 		}
@@ -821,7 +822,7 @@ public:
 		_n_cutoff_min = n_cutoff_min;
 		_n_cutoff_max = n_cutoff_max;
 		_n_total = n_total;
-	}	
+	}
 
 	list<pair<uint64, uint64>>& GetOutputPacksDesc()
 	{

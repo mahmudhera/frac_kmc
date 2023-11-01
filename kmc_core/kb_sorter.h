@@ -31,6 +31,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <cmath>
 
 
 #include "kxmer_set.h"
@@ -314,7 +315,7 @@ template <unsigned SIZE> CKmerBinSorter<SIZE>::CKmerBinSorter(CKMCParams &Params
 	// added by MRH
 	scaled = Params.scaled;
 	seed = Params.seed;
-	threshold = (long double)(largest_value)/(long double)(scaled);
+	threshold = std::round((long double)(largest_value)/(long double)(scaled));
 	//cout << "threshold = " << threshold << endl;
 	//cout << "scaled = " << scaled << endl;
 	//cout << "seed = " << seed << endl;
@@ -1134,7 +1135,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKxmers()
 			//first
 			kxmer_set.get_min(counter_pos, kmer);
 			count = kxmer_counters[counter_pos];
-			
+
 			// MRH start
 			//std::string str_rep = kmer.get_string_representation(kmer_len);
 			//uint64_t hash_values[2] = {0};
@@ -1382,7 +1383,7 @@ template <unsigned SIZE> void CKmerBinSorter<SIZE>::CompactKmers()
 		MurmurHash3_x64_128 ( str_rep.c_str(), kmer_len, seed, hash_values );
 		//std::cout << str_rep << " hashed to " << hash_values[0] << " at place4, where seed=" << seed << " and Scaled=" << scaled << endl;
 		// MRH end
-		if (count < cutoff_min || hash_values[0] >= threshold) 
+		if (count < cutoff_min || hash_values[0] >= threshold)
 		{
 			n_cutoff_min++;
 		}
