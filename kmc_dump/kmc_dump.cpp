@@ -254,7 +254,7 @@ int main(int argc, char* argv[])
 
 		// MRH code
 		uint64_t largest_value = 0xFFFFFFFFFFFFFFFF;
-		uint64_t threshold = (long double)(largest_value)/(long double)(scaled);
+		uint64_t threshold = std::round((long double)(largest_value)/(long double)(scaled));
 		//cout << "threshold = " << threshold << endl;
 
 		string output_string = "[{\"class\":\"frac_kmc_signature\",\"email\":\"\",\"hash_function\":\"0.murmur64\"";
