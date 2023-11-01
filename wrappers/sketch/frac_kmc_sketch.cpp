@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
                             + " " + kmers_dbname
                             + " .";
     std::cout << cmd1.c_str() << std::endl;
-    int result1 = std::system(cmd1);
+    int result1 = std::system(cmd1.c_str());
 
     if (result1 != 0) {
         std::cout << "kmc database build failed! Exiting..." << std::endl;
@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
                             + " " + kmers_dbname
                             + " " + outfilename;
     std::cout << cmd2.c_str() << std::endl;
-    int result2 = std::system(cmd2);
+    int result2 = std::system(cmd2.c_str());
 
     if (result2 != 0) {
         std::cout << "sketch writing failed! Exiting..." << std::endl;
