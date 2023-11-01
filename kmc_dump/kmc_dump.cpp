@@ -159,7 +159,7 @@ int main(int argc, char* argv[])
 	uint32 seed = 0;
 	uint32 scaled = 1;
 	uint32 ksize = 0;
-	string filename = "";	
+	string filename = "";
 
 	FILE * out_file;
 	//------------------------------------------------------------
@@ -320,7 +320,7 @@ int main(int argc, char* argv[])
 			}
 		}
 
-		output_string = "], \"molecule\":\"dna\"}], \"version\":0.1}\n";
+		output_string = "], \"molecule\":\"dna\", \"md5sum\":\"abcd\"}], \"version\":0.1}]\n";
 		strcpy(str, output_string.c_str());
 		fwrite(str, 1, output_string.length(), out_file);
 
