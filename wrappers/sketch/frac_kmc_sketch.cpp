@@ -26,13 +26,17 @@ int main(int argc, char* argv[]) {
     std::string infilename;
     int seed = 42;
     std::string outfilename;
+    bool isFasta = false;
+    bool isFastq = false;
 
     if (argc < 3) {
         std::cerr << "Usage: " << argv[0] << " <infilename> <outfilename> [options]" << std::endl;
         std::cerr << "Options:" << std::endl;
         std::cerr << "  --ksize <int>      kmer size (default: 21)" << std::endl;
         std::cerr << "  --scaled <int>     Scaled value (default: 1000)" << std::endl;
-        std::cerr << "  --seed <int>       Random seed for mmh3 (default: 42)" << std::endl;
+        std::cerr << "  --seed <int>       Random seed (default: 42)" << std::endl;
+        std::cerr << "  --fa               Input file is in fasta format" << std::endl;
+        std::cerr << "  --fq               Input file is in fastq format" << std::endl;
         return 1;
     }
 
@@ -46,7 +50,16 @@ int main(int argc, char* argv[]) {
             scaled = std::atoi(argv[i + 1]);
         } else if (std::string(argv[i]) == "--seed" && i + 1 < argc) {
             seed = std::atoi(argv[i + 1]);
+        } else if (std::string(argv[i]) == "--fa") {
+            isFasta = true;
+        } else if (std::string(argv[i]) == "--fq") {
+            isFastq = true;
         }
+    }
+
+    if ( !isFasta && !isFastq ) {
+        std::cerr << "Input file format: Not specified" << std::endl;
+        return 1;
     }
 
     //std::cout << "ksize: " << ksize << std::endl;
@@ -56,12 +69,24 @@ int main(int argc, char* argv[]) {
     //std::cout << "outfilename: " << outfilename << std::endl;
 
     std::string kmers_dbname = "." + infilename + "_kmers_" + generateRandomString(RANDSTRLEN);
-    std::string cmd1 = "frackmc -ci1 -scaled" + std::to_string(scaled)
+    std::string cmd1;
+    
+    if (isFasta) {
+        cmd1 = "frackmc -ci1 -scaled" + std::to_string(scaled)
                             + " -S" + std::to_string(seed)
                             + " -k" + std::to_string(ksize)
                             + " -fm " + infilename
                             + " " + kmers_dbname
                             + " .";
+    } else {
+        cmd1 = "frackmc -ci1 -scaled" + std::to_string(scaled)
+                            + " -S" + std::to_string(seed)
+                            + " -k" + std::to_string(ksize)
+                            + " -fq " + infilename
+                            + " " + kmers_dbname
+                            + " .";
+    }
+
     std::cout << cmd1.c_str() << std::endl;
     int result1 = std::system(cmd1.c_str());
 
