@@ -17,6 +17,7 @@ def main():
     seed = 42
     for scaled in scaled_values:
         for kmer_size in kmer_sizes:
+            print(f"Running k={kmer_size}, scaled={scaled}")
             sourmash_sketch_name = f"{filename}_sketch_sm_k_{kmer_size}_s_{scaled}.sig"
             frackmc_sketch_name =  f"{filename}_sketch_fk_k_{kmer_size}_s_{scaled}.sig"
             
