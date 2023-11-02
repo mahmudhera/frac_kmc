@@ -86,6 +86,11 @@ int main(int argc, char* argv[]) {
 
     std::string cmd3 = "rm " + kmers_dbname+"*";
     std::cout << cmd3.c_str() << std::endl;
+    int result3 = std::system(cmd3.c_str());    
+    if (result3 != 0) {
+        std::cout << "kmc database removal failed! Exiting..." << std::endl;
+        return -1;
+    }
 
     return 0;
 }
