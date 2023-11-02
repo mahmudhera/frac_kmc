@@ -12,8 +12,8 @@ def main():
     records_file = open("records", "w")
     records_file.write("kmer_size,scaled,sourmash_time,frackmc_time\n")
 
-    scaled_values = [1, 10, 100, 1000, 10000, 100000]
-    kmer_sizes = [21, 31, 51, 61, 71]
+    scaled_values = [10, 100, 1000, 10000, 100000]
+    kmer_sizes = [21, 31, 51, 61]
     seed = 42
     for scaled in scaled_values:
         for kmer_size in kmer_sizes:
