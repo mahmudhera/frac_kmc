@@ -5,7 +5,7 @@ Frac-KMC is a FracMinHash sketch generator tool from FASTA/FASTQ files. This too
 ### Why use Frac-KMC?
 KMC is an extremely fast k-mer couting tool. KMC is also very low-memory. It uses minimizers to count kmers very fast, using multiple bins and threads. Therefore, KMC that has been modified to compute FracMinHash sketches should be able to compute the sketches extremely fast. People traditionally use the software `sourmash` (the command `sourmash sketch`) to compute FracMinHash sketches. Frac-KMC is an attemp to make the sketching faster.
 
-##### Frac-KMC is faster than `sourmash sketch``
+##### Frac-KMC is faster than `sourmash sketch`
 
 Initial investigations have revealed following results: we ran `sourmash sktech` and `fracKmcSketch` to generate FracMinHash sketch of Human reference genome (GrCh38) for various scaled values and kmer sizes. The running time is compared below.
 
