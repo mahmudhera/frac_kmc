@@ -20,24 +20,24 @@ def main():
             print(f"Running k={kmer_size}, scaled={scaled}")
             sourmash_sketch_name = f"{filename}_sketch_sm_k_{kmer_size}_s_{scaled}.sig"
             frackmc_sketch_name =  f"{filename}_sketch_fk_k_{kmer_size}_s_{scaled}.sig"
-            
+
             # run sourmash
             start_time = time.time()
             cmd = f"sourmash sketch dna -p k={kmer_size},scaled={scaled} -o {sourmash_sketch_name} {filename}"
             subprocess.run(cmd.split(' '))
             end_time = time.time()
             sourmash_time = end_time - start_time
-            
+
             # run frackmc
             start_time = time.time()
-            cmd = f"fracKmcSketch {filename} {frackmc_sketch_name} --ksize {kmer_size} --scaled {scaled} --seed {seed}"
+            cmd = f"fracKmcSketch {filename} {frackmc_sketch_name} --ksize {kmer_size} --scaled {scaled} --seed {seed} --fa"
             subprocess.run(cmd.split(' '))
             end_time = time.time()
             frackmc_time = end_time - start_time
-            
+
             # record results
             records_file.write(f"{kmer_size},{scaled},{sourmash_time},{frackmc_time}\n")
-            
+
     records_file.close()
 
 if __name__ == "__main__":
