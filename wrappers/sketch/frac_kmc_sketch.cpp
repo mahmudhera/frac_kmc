@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
     //std::cout << "seed: " << seed << std::endl;
     //std::cout << "outfilename: " << outfilename << std::endl;
 
-    std::string kmers_dbname = "." + infilename + "_kmers_" + generateRandomString(RANDSTRLEN);
+    std::string kmers_dbname = infilename + "_kmers_" + generateRandomString(RANDSTRLEN);
     std::string cmd1;
     
     if (isFasta) {
