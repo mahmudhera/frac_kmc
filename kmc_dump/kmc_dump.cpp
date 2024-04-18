@@ -377,7 +377,7 @@ void print_info(void)
 			  << "-cx<value> - exclude k-mers occurring more of than <value> times\n"
 			  << "-S<value>  - seed to be used by mmh3\n"
 			  << "-scaled<value>  - scaled for FracMinHash\n"
-			  << "-a - output abundances (default: false)\n"
+			  << "-a - output abundances (default: false)\n";
 }
 
 // ***** EOF
