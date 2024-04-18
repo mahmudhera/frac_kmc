@@ -198,6 +198,9 @@ int main(int argc, char* argv[])
 			break;
 	}
 
+	// print output abudances
+	cout << "Output abundances " << output_abundances << endl;
+
 	//cout << "Scaled " << scaled << endl;
 	//cout << "Seed " << seed << endl;
 
