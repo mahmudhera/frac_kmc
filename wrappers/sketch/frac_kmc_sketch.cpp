@@ -37,11 +37,13 @@ int main(int argc, char* argv[]) {
         std::cerr << "  --seed <int>       Random seed (default: 42)" << std::endl;
         std::cerr << "  --fa               Input file is in fasta format" << std::endl;
         std::cerr << "  --fq               Input file is in fastq format" << std::endl;
+        std::cerr << "  --a                Write abundances" << std::endl;
         return 1;
     }
 
     infilename = argv[1];
     outfilename = argv[2];
+    bool use_abundance = false;
 
     for (int i = 3; i < argc; i++) {
         if (std::string(argv[i]) == "--ksize" && i + 1 < argc) {
@@ -54,6 +56,8 @@ int main(int argc, char* argv[]) {
             isFasta = true;
         } else if (std::string(argv[i]) == "--fq") {
             isFastq = true;
+        } else if (std::string(argv[i]) == "--a") {
+            use_abundance = true;
         }
     }
 
@@ -101,6 +105,11 @@ int main(int argc, char* argv[]) {
                             + " -filename" + infilename
                             + " " + kmers_dbname
                             + " " + outfilename;
+
+    if (use_abundance) {
+        cmd2 += " -a";
+    }
+    
     std::cout << cmd2.c_str() << std::endl;
     int result2 = std::system(cmd2.c_str());
 
