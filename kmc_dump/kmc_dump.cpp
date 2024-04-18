@@ -160,6 +160,7 @@ int main(int argc, char* argv[])
 	uint32 scaled = 1;
 	uint32 ksize = 0;
 	string filename = "";
+	bool output_abundances = false;
 
 	FILE * out_file;
 	//------------------------------------------------------------
@@ -187,6 +188,8 @@ int main(int argc, char* argv[])
 					ksize = atoi(&argv[i][6]);
 			else if(strncmp(argv[i], "-filename", 9) == 0)
 					filename = string(&argv[i][9]);
+			else if(strncmp(argv[i], "-a", 2) == 0)
+					output_abundances = true;
 			else
 				break;
 		}
@@ -274,7 +277,11 @@ int main(int argc, char* argv[])
 		ss2 << seed;
 		output_string = output_string + ",\"seed\":" + string(ss2.str());
 
+		// MRH code
 		vector<uint64_t> hashes;
+
+		// store hash value to counter dictionary
+		std::map<uint64_t, uint64_t> hash_to_counter;
 
 		while (kmer_data_base.ReadNextKmer(kmer_object, counter))
 		{
@@ -294,6 +301,9 @@ int main(int argc, char* argv[])
 				//fwrite(str, 1, _kmer_length + counter_len + 2, out_file);
 				hashes.push_back(out[0]);
 			}
+
+			// store hash value to counter dictionary
+			hash_to_counter[out[0]] = counter;
 		}
 
 		std::sort(hashes.begin(), hashes.end());
@@ -320,6 +330,29 @@ int main(int argc, char* argv[])
 			}
 		}
 
+		if (output_abundances) {
+
+			output_string = "],\"abundances\":[";
+			strcpy(str, output_string.c_str());
+			fwrite(str, 1, output_string.length(), out_file);
+
+			for (int i=0; i<hashes.size(); i++)
+			{
+				std::ostringstream ss;
+				ss << hash_to_counter[hashes[i]];
+				output_string = string(ss.str());
+				strcpy(str, output_string.c_str());
+				fwrite(str, 1, output_string.length(), out_file);
+				if (i<hashes.size()-1)
+				{
+					output_string = ",";
+					strcpy(str, output_string.c_str());
+					fwrite(str, 1, output_string.length(), out_file);
+				}
+			}
+
+		}
+
 		output_string = "], \"molecule\":\"dna\", \"md5sum\":\"abcd\"}], \"version\":0.1}]\n";
 		strcpy(str, output_string.c_str());
 		fwrite(str, 1, output_string.length(), out_file);
@@ -343,7 +376,8 @@ void print_info(void)
 			  << "-ci<value> - exclude k-mers occurring less than <value> times\n"
 			  << "-cx<value> - exclude k-mers occurring more of than <value> times\n"
 			  << "-S<value>  - seed to be used by mmh3\n"
-			  << "-scaled<value>  - scaled for FracMinHash\n";
+			  << "-scaled<value>  - scaled for FracMinHash\n"
+			  << "-a - output abundances (default: false)\n"
 }
 
 // ***** EOF
