@@ -21,6 +21,7 @@
 #include <cmath>
 #include "../kmc_api/kmc_file.h"
 #include "nc_utils.h"
+#include <map>
 
 using namespace std;
 
