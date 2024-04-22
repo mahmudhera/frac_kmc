@@ -99,16 +99,17 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
-    std::string cmd2 = "frackmcdump -ci1 -scaled" + std::to_string(scaled)
+    std::string cmd2 = "frackmcdump";
+    if (use_abundance) {
+        cmd2 += " -a";
+    }
+
+    cmd2 += " -ci1 -scaled" + std::to_string(scaled)
                             + " -S" + std::to_string(seed)
                             + " -ksize" + std::to_string(ksize)
                             + " -filename" + infilename
                             + " " + kmers_dbname
                             + " " + outfilename;
-
-    if (use_abundance) {
-        cmd2 += " -a";
-    }
     
     std::cout << cmd2.c_str() << std::endl;
     int result2 = std::system(cmd2.c_str());
