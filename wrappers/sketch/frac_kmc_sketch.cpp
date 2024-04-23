@@ -2,6 +2,7 @@
 #include <string>
 #include <cstdlib>
 #include <random>
+#include <thread>
 
 #define RANDSTRLEN 10
 
@@ -38,12 +39,14 @@ int main(int argc, char* argv[]) {
         std::cerr << "  --fa               Input file is in fasta format" << std::endl;
         std::cerr << "  --fq               Input file is in fastq format" << std::endl;
         std::cerr << "  --a                Write abundances" << std::endl;
+        std::cerr << "  --t <int>          Number of threads for each run of kmc" << std::endl;
         return 1;
     }
 
     infilename = argv[1];
     outfilename = argv[2];
     bool use_abundance = false;
+    int num_threads = -1;
 
     for (int i = 3; i < argc; i++) {
         if (std::string(argv[i]) == "--ksize" && i + 1 < argc) {
@@ -58,12 +61,19 @@ int main(int argc, char* argv[]) {
             isFastq = true;
         } else if (std::string(argv[i]) == "--a") {
             use_abundance = true;
+        } else if (std::string(argv[i]) == "--t" && i + 1 < argc) {
+            num_threads = std::atoi(argv[i + 1]);
         }
     }
 
     if ( !isFasta && !isFastq ) {
         std::cerr << "Input file format: Not specified" << std::endl;
         return 1;
+    }
+
+    // if number of threads is not specified, use the default value (all available threads)
+    if (num_threads == -1) {
+        num_threads = std::thread::hardware_concurrency();
     }
 
     //std::cout << "ksize: " << ksize << std::endl;
@@ -79,6 +89,7 @@ int main(int argc, char* argv[]) {
         cmd1 = "frackmc -ci1 -cs35565 -scaled" + std::to_string(scaled)
                             + " -S" + std::to_string(seed)
                             + " -k" + std::to_string(ksize)
+                            + " -t" + std::to_string(num_threads)
                             + " -fm " + infilename
                             + " " + kmers_dbname
                             + " .";
@@ -86,6 +97,7 @@ int main(int argc, char* argv[]) {
         cmd1 = "frackmc -ci1 -cs35565 -scaled" + std::to_string(scaled)
                             + " -S" + std::to_string(seed)
                             + " -k" + std::to_string(ksize)
+                            + " -t" + std::to_string(num_threads)
                             + " -fq " + infilename
                             + " " + kmers_dbname
                             + " .";
