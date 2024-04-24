@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // if number of threads is not specified, use the default value (all available threads)
+    // if number of threads is not specified, use the default value (all available cores)
     if (num_threads == -1) {
         num_threads = std::thread::hardware_concurrency();
     }
@@ -82,8 +82,19 @@ int main(int argc, char* argv[]) {
     //std::cout << "seed: " << seed << std::endl;
     //std::cout << "outfilename: " << outfilename << std::endl;
 
-    std::string kmers_dbname = infilename + "_kmers_" + generateRandomString(RANDSTRLEN);
+    std::string random_string = generateRandomString(RANDSTRLEN);
+    std::string kmers_dbname = infilename + "_kmers_" + random_string;
     std::string cmd1;
+
+    // mkdir random_string
+    std::string cmd0 = "mkdir ./" + random_string;
+    std::cout << cmd0.c_str() << std::endl;
+    int result0 = std::system(cmd0.c_str());
+    if (result0 != 0) {
+        std::cout << "Directory creation failed! Exiting..." << std::endl;
+        return -1;
+    }
+
     
     if (isFasta) {
         cmd1 = "frackmc -ci1 -cs35565 -scaled" + std::to_string(scaled)
@@ -92,7 +103,7 @@ int main(int argc, char* argv[]) {
                             + " -t" + std::to_string(num_threads)
                             + " -fm " + infilename
                             + " " + kmers_dbname
-                            + " .";
+                            + " ./" + random_string;
     } else {
         cmd1 = "frackmc -ci1 -cs35565 -scaled" + std::to_string(scaled)
                             + " -S" + std::to_string(seed)
@@ -100,7 +111,7 @@ int main(int argc, char* argv[]) {
                             + " -t" + std::to_string(num_threads)
                             + " -fq " + infilename
                             + " " + kmers_dbname
-                            + " .";
+                            + " ./" + random_string;
     }
 
     std::cout << cmd1.c_str() << std::endl;
@@ -136,6 +147,14 @@ int main(int argc, char* argv[]) {
     int result3 = std::system(cmd3.c_str());    
     if (result3 != 0) {
         std::cout << "kmc database removal failed! Exiting..." << std::endl;
+        return -1;
+    }
+
+    std::string cmd4 = "rm -r ./" + random_string;
+    std::cout << cmd4.c_str() << std::endl;
+    int result4 = std::system(cmd4.c_str());
+    if (result4 != 0) {
+        std::cout << "Directory removal failed! Exiting..." << std::endl;
         return -1;
     }
 
