@@ -29,6 +29,7 @@ int main(int argc, char* argv[]) {
     std::string outfilename;
     bool isFasta = false;
     bool isFastq = false;
+    int nthreads = 1;
 
     if (argc < 3) {
         std::cerr << "Usage: " << argv[0] << " <infilename> <outfilename> [options]" << std::endl;
@@ -39,7 +40,7 @@ int main(int argc, char* argv[]) {
         std::cerr << "  --fa               Input file is in fasta format" << std::endl;
         std::cerr << "  --fq               Input file is in fastq format" << std::endl;
         std::cerr << "  --a                Write abundances" << std::endl;
-        std::cerr << "  --t <int>          Number of threads for each run of kmc" << std::endl;
+        std::cerr << "  --n <int>          Number of threads (default: 1)" << std::endl;
         return 1;
     }
 
@@ -61,8 +62,6 @@ int main(int argc, char* argv[]) {
             isFastq = true;
         } else if (std::string(argv[i]) == "--a") {
             use_abundance = true;
-        } else if (std::string(argv[i]) == "--t" && i + 1 < argc) {
-            num_threads = std::atoi(argv[i + 1]);
         }
     }
 
@@ -100,7 +99,6 @@ int main(int argc, char* argv[]) {
         cmd1 = "frackmc -ci1 -cs35565 -scaled" + std::to_string(scaled)
                             + " -S" + std::to_string(seed)
                             + " -k" + std::to_string(ksize)
-                            + " -t" + std::to_string(num_threads)
                             + " -fm " + infilename
                             + " " + kmers_dbname
                             + " ./" + random_string;
@@ -108,7 +106,6 @@ int main(int argc, char* argv[]) {
         cmd1 = "frackmc -ci1 -cs35565 -scaled" + std::to_string(scaled)
                             + " -S" + std::to_string(seed)
                             + " -k" + std::to_string(ksize)
-                            + " -t" + std::to_string(num_threads)
                             + " -fq " + infilename
                             + " " + kmers_dbname
                             + " ./" + random_string;
