@@ -62,6 +62,8 @@ int main(int argc, char* argv[]) {
             isFastq = true;
         } else if (std::string(argv[i]) == "--a") {
             use_abundance = true;
+        } else if (std::string(argv[i]) == "--n" && i + 1 < argc) {
+            num_threads = std::atoi(argv[i + 1]);
         }
     }
 
@@ -99,6 +101,7 @@ int main(int argc, char* argv[]) {
         cmd1 = "frackmc -ci1 -cs35565 -scaled" + std::to_string(scaled)
                             + " -S" + std::to_string(seed)
                             + " -k" + std::to_string(ksize)
+                            + " -n" + std::to_string(num_threads)
                             + " -fm " + infilename
                             + " " + kmers_dbname
                             + " ./" + random_string;
@@ -106,6 +109,7 @@ int main(int argc, char* argv[]) {
         cmd1 = "frackmc -ci1 -cs35565 -scaled" + std::to_string(scaled)
                             + " -S" + std::to_string(seed)
                             + " -k" + std::to_string(ksize)
+                            + " -n" + std::to_string(num_threads)
                             + " -fq " + infilename
                             + " " + kmers_dbname
                             + " ./" + random_string;
