@@ -101,7 +101,7 @@ int main(int argc, char* argv[]) {
         cmd1 = "frackmc -ci1 -cs35565 -scaled" + std::to_string(scaled)
                             + " -S" + std::to_string(seed)
                             + " -k" + std::to_string(ksize)
-                            + " -n" + std::to_string(num_threads)
+                            + " -t" + std::to_string(num_threads)
                             + " -fm " + infilename
                             + " " + kmers_dbname
                             + " ./" + random_string;
@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
         cmd1 = "frackmc -ci1 -cs35565 -scaled" + std::to_string(scaled)
                             + " -S" + std::to_string(seed)
                             + " -k" + std::to_string(ksize)
-                            + " -n" + std::to_string(num_threads)
+                            + " -t" + std::to_string(num_threads)
                             + " -fq " + infilename
                             + " " + kmers_dbname
                             + " ./" + random_string;
